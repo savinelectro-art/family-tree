@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap&subset=cyrillic" rel="stylesheet">
 
 <style>
- 
   :root {
     --bg: #14181c;
     --bg-deep: #0e1114;
@@ -104,7 +103,7 @@
   #search:focus { border-color: var(--brass-bright); background: rgba(236,225,200,0.08); }
   #search:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
-  #reset-btn {
+  #reset-btn, #export-json {
     background: transparent;
     border: 1px solid rgba(184,146,90,0.35);
     color: var(--brass);
@@ -115,13 +114,15 @@
     border-radius: 3px;
     cursor: pointer;
     white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
     transition: opacity 0.15s ease, background 0.15s ease;
   }
+  #reset-btn {
+    opacity: 0;
+    pointer-events: none;
+  }
   #reset-btn.visible { opacity: 1; pointer-events: auto; }
-  #reset-btn:hover { background: rgba(184,146,90,0.12); }
-  #reset-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  #reset-btn:hover, #export-json:hover { background: rgba(184,146,90,0.12); }
+  #reset-btn:focus-visible, #export-json:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
   /* ── Relation Finder ── */
   .relation-section {
@@ -406,6 +407,115 @@
     color: var(--ink-faint); font-size: 12.5px; font-family: 'JetBrains Mono', monospace;
   }
 
+  /* ── Editor Panel ── */
+  .editor-panel {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .editor-content {
+    background: var(--bg-deep);
+    border: 1px solid var(--brass);
+    border-radius: 6px;
+    padding: 28px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .editor-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--paper);
+    margin: 0 0 20px;
+  }
+
+  .editor-field {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .editor-field label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .editor-field input,
+  .editor-field textarea {
+    background: rgba(236,225,200,0.05);
+    border: 1px solid rgba(184,146,90,0.35);
+    color: var(--ink);
+    font-family: 'PT Serif', serif;
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .editor-field input:focus,
+  .editor-field textarea:focus {
+    border-color: var(--brass-bright);
+    background: rgba(236,225,200,0.08);
+  }
+
+  .editor-field textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .editor-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 3px;
+    border: 1px solid;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .btn-primary {
+    background: rgba(184,146,90,0.12);
+    border-color: rgba(184,146,90,0.45);
+    color: var(--brass-bright);
+  }
+
+  .btn-primary:hover {
+    background: rgba(184,146,90,0.22);
+    border-color: var(--brass-bright);
+    color: var(--paper);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border-color: rgba(184,146,90,0.35);
+    color: var(--brass);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(184,146,90,0.08);
+  }
+
   @media (max-width: 640px) {
     header.hero { padding: 40px 20px 28px; }
     .tree-scroll { padding: 4px 20px 24px; }
@@ -419,127 +529,10 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }
   }
-
-  /* ── Editor Panel ── */
-.editor-panel {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.editor-content {
-  background: var(--bg-deep);
-  border: 1px solid var(--brass);
-  border-radius: 6px;
-  padding: 28px;
-  max-width: 500px;
-  width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.editor-content h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  color: var(--paper);
-  margin: 0 0 20px;
-}
-
-.editor-field {
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.editor-field label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--ink-faint);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.editor-field input,
-.editor-field textarea {
-  background: rgba(236,225,200,0.05);
-  border: 1px solid rgba(184,146,90,0.35);
-  color: var(--ink);
-  font-family: 'PT Serif', serif;
-  font-size: 14px;
-  padding: 10px 12px;
-  border-radius: 3px;
-  outline: none;
-  transition: border-color 0.15s ease;
-}
-
-.editor-field input:focus,
-.editor-field textarea:focus {
-  border-color: var(--brass-bright);
-  background: rgba(236,225,200,0.08);
-}
-
-.editor-field textarea {
-  resize: vertical;
-  min-height: 80px;
-  font-family: 'PT Serif', serif;
-}
-
-.editor-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.btn-primary,
-.btn-secondary {
-  flex: 1;
-  padding: 11px 16px;
-  border-radius: 3px;
-  border: 1px solid;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.btn-primary {
-  background: rgba(184,146,90,0.12);
-  border-color: rgba(184,146,90,0.45);
-  color: var(--brass-bright);
-}
-
-.btn-primary:hover {
-  background: rgba(184,146,90,0.22);
-  border-color: var(--brass-bright);
-  color: var(--paper);
-}
-
-.btn-secondary {
-  background: transparent;
-  border-color: rgba(184,146,90,0.35);
-  color: var(--brass);
-}
-
-.btn-secondary:hover {
-  background: rgba(184,146,90,0.08);
-}
-
-.editor-field input:focus-visible,
-.editor-field textarea:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
 </style>
- 
-  <script src="js/data-loader.js"></script>
-  <script src="js/data-editor.js"></script>
 
+<script src="js/data-loader.js"></script>
+<script src="js/data-editor.js"></script>
 </head>
 <body>
 
@@ -603,33 +596,70 @@
   <div id="panel-body"></div>
 </aside>
 
+<!-- Панель редактирования персоны -->
+<div id="editor-panel" class="editor-panel" style="display:none;">
+  <div class="editor-content">
+    <h3>Редактирование персоны</h3>
+    <div class="editor-field">
+      <label for="edit-name">Имя</label>
+      <input id="edit-name" type="text" placeholder="ФИО"/>
+    </div>
+    <div class="editor-field">
+      <label for="edit-years">Годы жизни</label>
+      <input id="edit-years" type="text" placeholder="1850-1920"/>
+    </div>
+    <div class="editor-field">
+      <label for="edit-place">Место</label>
+      <input id="edit-place" type="text" placeholder="село, город"/>
+    </div>
+    <div class="editor-field">
+      <label for="edit-bio">Биография</label>
+      <textarea id="edit-bio" placeholder="Примечания и биографические данные"></textarea>
+    </div>
+    <div class="editor-field">
+      <label for="edit-photo">Фото URL</label>
+      <input id="edit-photo" type="text" placeholder="photos/name.jpg"/>
+    </div>
+    <div class="editor-buttons">
+      <button id="save-edit" type="button" class="btn-primary">Сохранить</button>
+      <button id="cancel-edit" type="button" class="btn-secondary">Отмена</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* =====================================================================
-   ДАННЫЕ
+   ИНИЦИАЛИЗАЦИЯ И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
    ===================================================================== */
-// Инициализируем дерево через data-loader
+
 let PEOPLE = [];
+let byId = {};
+let childrenOf = {};
 
 async function initTree(){
   try {
+    // Загружаем данные через data-loader
     PEOPLE = await SavinTreeData.loadPeople();
     
-    // Пересчитываем индексы после загрузки
-    const byId = Object.fromEntries(PEOPLE.map(p => [p.id, p]));
-    const childrenOf = {};
-    PEOPLE.forEach(p => (p.parents || []).forEach(pid => {
-      (childrenOf[pid] = childrenOf[pid] || []).push(p.id);
-    }));
-    
-    // Обновляем глобальные переменные для остального кода
-    window.byId = byId;
-    window.childrenOf = childrenOf;
-    
-    // Перерисовываем дерево
-    document.getElementById('tree-inner').innerHTML = '<svg class="connections" id="svg-lines"></svg>';
-    renderTree();
+    // Пересчитываем индексы
+    byId = Object.fromEntries(PEOPLE.map(p => [p.id, p]));
+    childrenOf = {};
+    PEOPLE.forEach(p => {
+      if (p.parents && p.parents.length) {
+        p.parents.forEach(pid => {
+          if (!childrenOf[pid]) childrenOf[pid] = [];
+          childrenOf[pid].push(p.id);
+        });
+      }
+    });
     
     console.log('Tree initialized with', PEOPLE.length, 'people');
+    
+    // Обновляем статистику
+    document.getElementById('stat-people').textContent = PEOPLE.length;
+    
+    // Перерисовываем дерево
+    renderTree();
   } catch (err) {
     console.error('Failed to initialize tree:', err);
     alert('Ошибка при загрузке данных дерева');
@@ -640,7 +670,6 @@ function renderTree(){
   const treeInner = document.getElementById('tree-inner');
   const genNumbers = [...new Set(PEOPLE.map(p => p.gen))].sort((a,b) => a - b);
   
-  // Очищаем и перерисовываем
   treeInner.innerHTML = '<svg class="connections" id="svg-lines"></svg>';
   
   genNumbers.forEach(gen => {
@@ -664,11 +693,11 @@ function renderTree(){
       card.dataset.id = p.id;
       card.style.setProperty('--tilt', (i % 2 === 0 ? -1 : 1) * (1 + (i % 3)) + 'deg');
       
-      const initials = p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
+      const init = p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
       card.innerHTML = `
         <div class="photo">${p.photo
           ? `<img src="${p.photo}" alt="${p.name}">`
-          : `<span class="initials">${initials}</span>`}</div>
+          : `<span class="initials">${init}</span>`}</div>
         <div class="name">${p.name}</div>
         <div class="yrs">${p.years}</div>`;
       
@@ -680,7 +709,6 @@ function renderTree(){
     treeInner.appendChild(row);
   });
   
-  // Перерисовываем линии
   drawLines();
 }
 
@@ -690,35 +718,10 @@ document.addEventListener('DOMContentLoaded', initTree);
 // Слушаем изменения данных
 window.addEventListener('savin-tree-data-changed', initTree);
 
-/* ── Индексы ── */
-const byId = Object.fromEntries(PEOPLE.map(p => [p.id, p]));
-const childrenOf = {};
-PEOPLE.forEach(p => (p.parents || []).forEach(pid => {
-  (childrenOf[pid] = childrenOf[pid] || []).push(p.id);
-}));
-
 /* =====================================================================
-   АЛГОРИТМ РОДСТВА
-   Источник терминологии: русский словарь степеней родства.
-
-   Ключевые понятия:
-   - Брат/сестра            — дети одних родителей (distA=distB=1 от общего предка)
-   - Дядя/тётя              — брат/сестра отца или матери (dX=1, removal=1)
-   - Двоюродный дед/бабушка — брат/сестра деда или бабушки (dX=1, removal=2)
-   - Двоюродный брат/сестра — дети дяди или тётки (dX=dY=2)
-   - Двоюродная тётя/дядя   — двоюродный брат/сестра отца или матери (dX=2, removal=1)
-   - Двоюродная бабушка     — сестра деда или бабушки (dX=1, removal=2 ИЛИ dX=2, removal=0 от деда)
-   - Внучатый племянник     — внук брата или сестры (dX=1, removal=2, т.е. племянник племянника)
-   - Троюродный брат/сестра — дети двоюродного дяди/тётки (dX=dY=3)
-
-   Формула: distA и distB — расстояния от A и B до ближайшего общего предка.
-   Нормализуем: dX = min, dY = max; removal = dY - dX.
-   degree = dX - 1  (0=родные, 1=двоюродные, 2=троюродные, ...)
+   АЛГОРИТМ РОДСТВА (полный код как раньше)
    ===================================================================== */
 
-/**
- * BFS — кратчайший путь в двунаправленном графе родитель↔ребёнок.
- */
 function findPath(startId, endId) {
   if (startId === endId) return [startId];
   const visited = new Map([[startId, null]]);
@@ -748,7 +751,6 @@ function pathSteps(path) {
   });
 }
 
-/** Все предки id с расстоянием (BFS вверх). */
 function ancestorsMap(id) {
   const dist = new Map([[id, 0]]);
   const queue = [[id, 0]];
@@ -761,7 +763,6 @@ function ancestorsMap(id) {
   return dist;
 }
 
-/** Ближайший общий предок с расстояниями от A и B. */
 function closestCommonAncestor(idA, idB) {
   const dA = ancestorsMap(idA);
   const dB = ancestorsMap(idB);
@@ -777,7 +778,6 @@ function closestCommonAncestor(idA, idB) {
   return best;
 }
 
-/** Пол: 'f' или 'm'. Эвристика по отчеству → фамилии → имени. */
 function guessGender(name) {
   const parts = name.trim().split(/\s+/);
   const patr = parts[2] || '';
@@ -790,7 +790,6 @@ function guessGender(name) {
   return 'm';
 }
 
-/** Главная функция. */
 function describeRelation(idA, idB) {
   const gA = guessGender(byId[idA].name);
   const gB = guessGender(byId[idB].name);
@@ -803,10 +802,8 @@ function describeRelation(idA, idB) {
   let label;
 
   if (ups === 0) {
-    // A — предок B
     label = directLineLabel(downs, gA, gB);
   } else if (downs === 0) {
-    // B — предок A; показываем «B и A»
     label = directLineLabel(ups, gB, gA, true);
   } else {
     const ca = closestCommonAncestor(idA, idB);
@@ -816,16 +813,7 @@ function describeRelation(idA, idB) {
   return { label, pathExplanation: buildPathText(path) };
 }
 
-/* ── Прямая линия ── */
 function directLineLabel(dist, gAnc, gDesc, swap = false) {
-  /*
-   * Таблица по словарю:
-   * dist=1: отец/мать — сын/дочь
-   * dist=2: дед/бабушка — внук/внучка
-   * dist=3: прадед/прабабушка — правнук/правнучка
-   * dist=4: прапрадед/прапрабабушка — праправнук/праправнучка
-   * dist=5: прапрапрадед — пра-праправнук (далее: «пра» × (dist-2) + «дед»)
-   */
   function ancTerm(g, d) {
     if (d === 1) return g === 'f' ? 'мать'            : 'отец';
     if (d === 2) return g === 'f' ? 'бабушка'         : 'дедушка';
@@ -847,87 +835,29 @@ function directLineLabel(dist, gAnc, gDesc, swap = false) {
   return swap ? `${dt} и ${at}` : `${at} и ${dt}`;
 }
 
-/* ── Боковое родство ── */
 function lateralLabel(distA, distB, gA, gB) {
-  /*
-   * Нормализуем: dX ≤ dY. gX — тот, кто ближе к общему предку.
-   * removal = dY - dX — сдвиг поколений.
-   * degree  = dX - 1  — степень кузенства.
-   *
-   * Соответствие словарю:
-   *
-   * dX=1, dY=1, removal=0:
-   *   → братья / сёстры / брат и сестра
-   *
-   * dX=1, removal=1:
-   *   → тётя/дядя + племянница/племянник
-   *
-   * dX=1, removal=2:
-   *   → двоюродная бабушка/дедушка + внучатая племянница/племянник
-   *   (словарь: «внучатый племянник — внук брата или сестры»)
-   *
-   * dX=1, removal=3:
-   *   → двоюродная прабабушка/прадедушка + правнучатый племянник
-   *   (словарь: «правнучатый племянник — правнук брата или сестры»)
-   *
-   * dX=2, dY=2, removal=0:
-   *   → двоюродные братья/сёстры  (словарь: «двоюродный брат — сын дяди или тётки»)
-   *
-   * dX=2, removal=1:
-   *   → двоюродная тётя/дядя + двоюродный племянник
-   *   (словарь: «двоюродная тётка — двоюродная сестра отца или матери»)
-   *
-   * dX=2, removal=2:
-   *   → двоюродная бабушка/дедушка + двоюродный внучатый племянник
-   *   (словарь: «двоюродная бабушка — сестра бабушки или деда»; «внучатый двоюродный племянник — внук двоюродного брата или сестры»)
-   *
-   * dX=2, removal=3:
-   *   → двоюродная прабабушка/прадедушка + двоюродный правнучатый племянник
-   *   (словарь: «правнучатый двоюродный племянник — правнук двоюродного брата или сестры»)
-   *
-   * dX=3, dY=3, removal=0:
-   *   → троюродные братья/сёстры
-   *
-   * dX=3, removal=1:
-   *   → троюродная тётя/дядя + троюродный племянник
-   *
-   * dX=3, removal=2:
-   *   → троюродная бабушка/дедушка + троюродный внучатый племянник
-   *   (словарь: «троюродная бабушка — двоюродная сестра деда или бабушки»)
-   *
-   * И так далее по схеме.
-   */
-
   let dX = distA, dY = distB, gX = gA, gY = gB, swapped = false;
   if (dX > dY) { [dX, dY] = [dY, dX]; [gX, gY] = [gY, gX]; swapped = true; }
   const removal = dY - dX;
-
-  /* степень кузенства: 0=родные, 1=двоюродные, 2=троюродные, ... */
   const degree = dX - 1;
 
-  /* Префиксы для N-юродных: degree=1→"дво", 2→"тро", ... */
   const PREF = ['', 'дво', 'тро', 'четверо', 'пяти', 'шести', 'семи', 'восьми', 'девяти', 'десяти'];
   const pref = degree < PREF.length ? PREF[degree] : `${degree + 1}-`;
 
-  /* Для degree=0 (родная линия через общего предка) отдельная ветка */
   if (degree === 0) {
-    // dX === 1
-    if (removal === 0) return siblingLabel(gA, gB);            // брат/сестра
-    if (removal === 1) return uncleLabel(gX, gY, swapped);     // дядя/тётя — племянник/ца
-    if (removal === 2) return grandUncleLabel(gX, gY, swapped, '');    // двоюродная бабушка — внучатый племянник
-    if (removal === 3) return greatGrandUncleLabel(gX, gY, swapped, ''); // прабабушка — правнучатый племянник
+    if (removal === 0) return siblingLabel(gA, gB);
+    if (removal === 1) return uncleLabel(gX, gY, swapped);
+    if (removal === 2) return grandUncleLabel(gX, gY, swapped, '');
+    if (removal === 3) return greatGrandUncleLabel(gX, gY, swapped, '');
     return farUncleLabel(removal, gX, gY, swapped, '');
   }
 
-  /* Кузены (degree >= 1) */
   if (removal === 0) return cousinSiblingLabel(degree, gA, gB, pref);
   if (removal === 1) return cousinUncleLabel(degree, gX, gY, swapped, pref);
   if (removal === 2) return cousinGrandUncleLabel(degree, gX, gY, swapped, pref);
   if (removal === 3) return cousinGreatGrandUncleLabel(degree, gX, gY, swapped, pref);
   return cousinFarLabel(degree, removal, gX, gY, swapped, pref);
 }
-
-/* ── Вспомогательные функции родственных терминов ── */
 
 function siblingLabel(gA, gB) {
   if (gA === 'm' && gB === 'm') return 'братья';
@@ -937,31 +867,24 @@ function siblingLabel(gA, gB) {
   return `${first} и ${second}`;
 }
 
-// dX=1, removal=1: дядя/тётя — племянник/племянница
 function uncleLabel(gX, gY, swapped) {
   const u = gX === 'f' ? 'тётя'       : 'дядя';
   const n = gY === 'f' ? 'племянница' : 'племянник';
   return swapped ? `${n} и ${u}` : `${u} и ${n}`;
 }
 
-// dX=1, removal=2: двоюродная бабушка/дедушка — внучатая племянница/племянник
-// «двоюродная бабушка — сестра бабушки или деда»
-// «внучатый племянник — внук брата или сестры»
 function grandUncleLabel(gX, gY, swapped, pfx) {
   const u = gX === 'f' ? `${pfx}двоюродная бабушка`    : `${pfx}двоюродный дедушка`;
   const n = gY === 'f' ? `внучатая племянница`          : `внучатый племянник`;
   return swapped ? `${n} и ${u}` : `${u} и ${n}`;
 }
 
-// dX=1, removal=3: двоюродная прабабушка — правнучатый племянник
-// «правнучатый племянник — правнук брата или сестры»
 function greatGrandUncleLabel(gX, gY, swapped, pfx) {
   const u = gX === 'f' ? `${pfx}двоюродная прабабушка`  : `${pfx}двоюродный прадедушка`;
   const n = gY === 'f' ? `правнучатая племянница`        : `правнучатый племянник`;
   return swapped ? `${n} и ${u}` : `${u} и ${n}`;
 }
 
-// dX=1, removal>=4: обобщение
 function farUncleLabel(removal, gX, gY, swapped, pfx) {
   const pra = 'пра'.repeat(removal - 2);
   const u = gX === 'f' ? `${pfx}двоюродная ${pra}прабабушка` : `${pfx}двоюродный ${pra}прадедушка`;
@@ -969,7 +892,6 @@ function farUncleLabel(removal, gX, gY, swapped, pfx) {
   return swapped ? `${n} и ${u}` : `${u} и ${n}`;
 }
 
-// degree≥1, removal=0: двоюродные/троюродные братья и сёстры
 function cousinSiblingLabel(degree, gA, gB, pref) {
   if (gA === 'm' && gB === 'm') return `${pref}юродные братья`;
   if (gA === 'f' && gB === 'f') return `${pref}юродные сёстры`;
@@ -978,33 +900,24 @@ function cousinSiblingLabel(degree, gA, gB, pref) {
   return `${pref}юродные ${first} и ${second}`;
 }
 
-// degree≥1, removal=1: двоюродная тётя/дядя — двоюродный племянник
-// «двоюродная тётка — двоюродная сестра отца или матери»
-// «двоюродный племянник — сын двоюродного брата или сестры»
 function cousinUncleLabel(degree, gX, gY, swapped, pref) {
   const u = gX === 'f' ? `${pref}юродная тётя`      : `${pref}юродный дядя`;
   const n = gY === 'f' ? `${pref}юродная племянница` : `${pref}юродный племянник`;
   return swapped ? `${n} и ${u}` : `${u} и ${n}`;
 }
 
-// degree≥1, removal=2: двоюродная бабушка — двоюродный внучатый племянник
-// «двоюродная бабушка — сестра бабушки или деда»
-// «внучатый двоюродный племянник — внук двоюродного брата или сестры»
 function cousinGrandUncleLabel(degree, gX, gY, swapped, pref) {
   const u = gX === 'f' ? `${pref}юродная бабушка`           : `${pref}юродный дедушка`;
   const n = gY === 'f' ? `внучатая ${pref}юродная племянница` : `внучатый ${pref}юродный племянник`;
   return swapped ? `${n} и ${u}` : `${u} и ${n}`;
 }
 
-// degree≥1, removal=3: двоюродная прабабушка — двоюродный правнучатый племянник
-// «правнучатый двоюродный племянник — правнук двоюродного брата или сестры»
 function cousinGreatGrandUncleLabel(degree, gX, gY, swapped, pref) {
   const u = gX === 'f' ? `${pref}юродная прабабушка`           : `${pref}юродный прадедушка`;
   const n = gY === 'f' ? `правнучатая ${pref}юродная племянница` : `правнучатый ${pref}юродный племянник`;
   return swapped ? `${n} и ${u}` : `${u} и ${n}`;
 }
 
-// degree≥1, removal≥4: обобщение
 function cousinFarLabel(degree, removal, gX, gY, swapped, pref) {
   const pra = 'пра'.repeat(removal - 2);
   const u = gX === 'f' ? `${pref}юродная ${pra}прабабушка`           : `${pref}юродный ${pra}прадедушка`;
@@ -1012,7 +925,6 @@ function cousinFarLabel(degree, removal, gX, gY, swapped, pref) {
   return swapped ? `${n} и ${u}` : `${u} и ${n}`;
 }
 
-/** Текст цепочки пути. */
 function buildPathText(path) {
   return pathSteps(path).map(s => {
     const fn = id => byId[id].name.split(' ').slice(0,2).join(' ');
@@ -1022,9 +934,26 @@ function buildPathText(path) {
   }).join('<br>');
 }
 
+function computeGenYears(gen) {
+  const pp = PEOPLE.filter(p => p.gen === gen);
+  let minY = null, maxY = null, hasAlive = false;
+  pp.forEach(p => {
+    const raw = (p.years || '').trim();
+    if (/[-–—]\s*$/.test(raw)) hasAlive = true;
+    (raw.match(/\d{4}/g) || []).forEach(y => {
+      const n = +y;
+      if (minY === null || n < minY) minY = n;
+      if (maxY === null || n > maxY) maxY = n;
+    });
+  });
+  if (minY === null) return 'даты неизвестны';
+  return hasAlive ? `${minY}–` : `${minY}–${maxY}`;
+}
+
 /* =====================================================================
-   UI АВТОДОПОЛНЕНИЯ
+   АВТОДОПОЛНЕНИЕ
    ===================================================================== */
+
 let selectedA = null, selectedB = null;
 
 function setupAutocomplete(inputEl, listEl, onSelect) {
@@ -1084,24 +1013,15 @@ function setupAutocomplete(inputEl, listEl, onSelect) {
   inputEl.addEventListener('blur', () => setTimeout(() => listEl.classList.remove('open'), 150));
 }
 
-setupAutocomplete(
-  document.getElementById('rel-input-a'),
-  document.getElementById('ac-list-a'),
-  id => { selectedA = id; }
-);
-setupAutocomplete(
-  document.getElementById('rel-input-b'),
-  document.getElementById('ac-list-b'),
-  id => { selectedB = id; }
-);
+setupAutocomplete(document.getElementById('rel-input-a'), document.getElementById('ac-list-a'), id => { selectedA = id; });
+setupAutocomplete(document.getElementById('rel-input-b'), document.getElementById('ac-list-b'), id => { selectedB = id; });
 
 document.getElementById('find-relation-btn').addEventListener('click', () => {
   const resultEl = document.getElementById('relation-result');
   const textEl   = document.getElementById('result-text');
   const pathEl   = document.getElementById('result-path');
 
-  document.querySelectorAll('.card.relation-a, .card.relation-b')
-          .forEach(el => el.classList.remove('relation-a', 'relation-b'));
+  document.querySelectorAll('.card.relation-a, .card.relation-b').forEach(el => el.classList.remove('relation-a', 'relation-b'));
 
   const showError = msg => {
     textEl.innerHTML = msg; pathEl.innerHTML = '';
@@ -1132,67 +1052,21 @@ document.getElementById('find-relation-btn').addEventListener('click', () => {
 });
 
 /* =====================================================================
-   ДЕРЕВО
+   ДЕРЕВО И ВИЗУАЛИЗАЦИЯ
    ===================================================================== */
-const genNumbers = [...new Set(PEOPLE.map(p => p.gen))].sort((a,b) => a - b);
 
-function computeGenYears(gen) {
-  const pp = PEOPLE.filter(p => p.gen === gen);
-  let minY = null, maxY = null, hasAlive = false;
-  pp.forEach(p => {
-    const raw = (p.years || '').trim();
-    if (/[-–—]\s*$/.test(raw)) hasAlive = true;
-    (raw.match(/\d{4}/g) || []).forEach(y => {
-      const n = +y;
-      if (minY === null || n < minY) minY = n;
-      if (maxY === null || n > maxY) maxY = n;
-    });
-  });
-  if (minY === null) return 'даты неизвестны';
-  return hasAlive ? `${minY}–` : `${minY}–${maxY}`;
+const overlay  = document.getElementById('overlay');
+const panel    = document.getElementById('panel');
+const panelBody = document.getElementById('panel-body');
+
+function cardEl(id) {
+  return document.querySelector(`.card[data-id="${id}"]`);
 }
 
-document.getElementById('stat-people').textContent = PEOPLE.length;
-document.getElementById('stat-gens').textContent = genNumbers.length;
-
-const treeInner = document.getElementById('tree-inner');
-const svg = document.getElementById('svg-lines');
-const initials = name => name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
-
-genNumbers.forEach(gen => {
-  const row = document.createElement('div');
-  row.className = 'gen-row'; row.dataset.gen = gen;
-
-  const lbl = document.createElement('div');
-  lbl.className = 'gen-label';
-  lbl.innerHTML = `<span class="n">Поколение ${gen}</span><span class="years">${computeGenYears(gen)}</span>`;
-  row.appendChild(lbl);
-
-  const track = document.createElement('div');
-  track.className = 'gen-track';
-
-  PEOPLE.filter(p => p.gen === gen).forEach((p, i) => {
-    const card = document.createElement('button');
-    card.type = 'button'; card.className = 'card'; card.dataset.id = p.id;
-    card.style.setProperty('--tilt', (i % 2 === 0 ? -1 : 1) * (1 + (i % 3)) + 'deg');
-    card.innerHTML = `
-      <div class="photo">${p.photo
-        ? `<img src="${p.photo}" alt="${p.name}">`
-        : `<span class="initials">${initials(p.name)}</span>`}</div>
-      <div class="name">${p.name}</div>
-      <div class="yrs">${p.years}</div>`;
-    card.addEventListener('click', () => selectPerson(p.id));
-    track.appendChild(card);
-  });
-
-  row.appendChild(track);
-  treeInner.appendChild(row);
-});
-
-const cardEl = id => treeInner.querySelector(`.card[data-id="${id}"]`);
-
 function drawLines() {
+  const treeInner = document.getElementById('tree-inner');
   const ir = treeInner.getBoundingClientRect();
+  const svg = document.getElementById('svg-lines');
   svg.setAttribute('width', treeInner.scrollWidth);
   svg.setAttribute('height', treeInner.scrollHeight);
   svg.innerHTML = '';
@@ -1236,6 +1110,7 @@ function selectPerson(id) {
     el.classList.toggle('dim',    !active.has(el.dataset.id));
     el.classList.toggle('active', el.dataset.id === id);
   });
+  const svg = document.getElementById('svg-lines');
   svg.querySelectorAll('path').forEach(p => {
     const on = active.has(p.dataset.parent) && active.has(p.dataset.child);
     p.classList.toggle('dim',    !on);
@@ -1246,8 +1121,8 @@ function selectPerson(id) {
 }
 
 function clearSelection() {
-  document.querySelectorAll('.card').forEach(el =>
-    el.classList.remove('dim','active','relation-a','relation-b'));
+  document.querySelectorAll('.card').forEach(el => el.classList.remove('dim','active','relation-a','relation-b'));
+  const svg = document.getElementById('svg-lines');
   svg.querySelectorAll('path').forEach(p => p.classList.remove('dim','active'));
   document.getElementById('reset-btn').classList.remove('visible');
   document.getElementById('search').value = '';
@@ -1256,10 +1131,6 @@ function clearSelection() {
 }
 
 document.getElementById('reset-btn').addEventListener('click', clearSelection);
-
-const overlay  = document.getElementById('overlay');
-const panel    = document.getElementById('panel');
-const panelBody = document.getElementById('panel-body');
 
 function relList(ids, empty) {
   if (!ids?.length) return `<p style="color:var(--ink-faint);font-size:13px;">${empty}</p>`;
@@ -1286,11 +1157,9 @@ function openPanel(id) {
     });
   });
 
-  // Добавляем обработчик кнопки редактирования
   const editBtn = panelBody.querySelector('#edit-btn');
   if (editBtn) {
     editBtn.addEventListener('click', () => {
-      // Загружаем актуальные данные и открываем редактор
       SavinTreeData.loadPeople().then(merged => {
         const person = merged.find(p => p.id === id);
         if (person) SavinTreeEditor.openEditor(person);
@@ -1319,49 +1188,19 @@ document.getElementById('search').addEventListener('input', e => {
   const noResults = document.getElementById('no-results');
   if (!q) {
     document.querySelectorAll('.card').forEach(el => el.classList.remove('dim'));
+    const svg = document.getElementById('svg-lines');
     svg.querySelectorAll('path').forEach(p => p.classList.remove('dim'));
     resetBtn.classList.remove('visible');
     noResults.classList.remove('show');
     return;
   }
   const matches = PEOPLE.filter(p => p.name.toLowerCase().includes(q)).map(p => p.id);
-  document.querySelectorAll('.card').forEach(el =>
-    el.classList.toggle('dim', !matches.includes(el.dataset.id)));
+  document.querySelectorAll('.card').forEach(el => el.classList.toggle('dim', !matches.includes(el.dataset.id)));
+  const svg = document.getElementById('svg-lines');
   svg.querySelectorAll('path').forEach(p => p.classList.add('dim'));
   resetBtn.classList.add('visible');
   noResults.classList.toggle('show', !matches.length);
 });
 </script>
-
-<!-- Панель редактирования персоны -->
-<div id="editor-panel" class="editor-panel" style="display:none;">
-  <div class="editor-content">
-    <h3>Редактирование персоны</h3>
-    <div class="editor-field">
-      <label for="edit-name">Имя</label>
-      <input id="edit-name" type="text" placeholder="ФИО"/>
-    </div>
-    <div class="editor-field">
-      <label for="edit-years">Годы жизни</label>
-      <input id="edit-years" type="text" placeholder="1850-1920"/>
-    </div>
-    <div class="editor-field">
-      <label for="edit-place">Место</label>
-      <input id="edit-place" type="text" placeholder="село, город"/>
-    </div>
-    <div class="editor-field">
-      <label for="edit-bio">Биография</label>
-      <textarea id="edit-bio" placeholder="Примечания и биографические данные"></textarea>
-    </div>
-    <div class="editor-field">
-      <label for="edit-photo">Фото URL</label>
-      <input id="edit-photo" type="text" placeholder="photos/name.jpg"/>
-    </div>
-    <div class="editor-buttons">
-      <button id="save-edit" type="button" class="btn-primary">Сохранить</button>
-      <button id="cancel-edit" type="button" class="btn-secondary">Отмена</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
