@@ -9,6 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap&subset=cyrillic" rel="stylesheet">
 
 <style>
+  ```html
+  <script src="js/data-loader.js"></script>
+  <script src="js/data-editor.js"></script>
+```
   :root {
     --bg: #14181c;
     --bg-deep: #0e1114;
@@ -418,6 +422,122 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }
   }
+
+  /* ── Editor Panel ── */
+.editor-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.editor-content {
+  background: var(--bg-deep);
+  border: 1px solid var(--brass);
+  border-radius: 6px;
+  padding: 28px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.editor-content h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--paper);
+  margin: 0 0 20px;
+}
+
+.editor-field {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editor-field label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.editor-field input,
+.editor-field textarea {
+  background: rgba(236,225,200,0.05);
+  border: 1px solid rgba(184,146,90,0.35);
+  color: var(--ink);
+  font-family: 'PT Serif', serif;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 3px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.editor-field input:focus,
+.editor-field textarea:focus {
+  border-color: var(--brass-bright);
+  background: rgba(236,225,200,0.08);
+}
+
+.editor-field textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: 'PT Serif', serif;
+}
+
+.editor-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  padding: 11px 16px;
+  border-radius: 3px;
+  border: 1px solid;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary {
+  background: rgba(184,146,90,0.12);
+  border-color: rgba(184,146,90,0.45);
+  color: var(--brass-bright);
+}
+
+.btn-primary:hover {
+  background: rgba(184,146,90,0.22);
+  border-color: var(--brass-bright);
+  color: var(--paper);
+}
+
+.btn-secondary {
+  background: transparent;
+  border-color: rgba(184,146,90,0.35);
+  color: var(--brass);
+}
+
+.btn-secondary:hover {
+  background: rgba(184,146,90,0.08);
+}
+
+.editor-field input:focus-visible,
+.editor-field textarea:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
 </style>
 </head>
 <body>
@@ -437,6 +557,7 @@
   <div class="search-row">
     <input id="search" type="text" placeholder="Найти человека по имени…" autocomplete="off">
     <button id="reset-btn" type="button">Сбросить</button>
+    <button id="export-json" type="button">📥 Экспорт</button>
   </div>
 </header>
 
@@ -485,58 +606,88 @@
 /* =====================================================================
    ДАННЫЕ
    ===================================================================== */
-const PEOPLE = [
-  { id:'p1',  name:'Савин Василий Петрович',                   years:'1870-1938',   place:'с. Вознесеновка',  gen:1, parents:[],           photo:'photos/Vasilii1870.jpg',    bio:'неизвестно' },
-  { id:'p2',  name:'Савина Фекла Кузьминична',                  years:'1871–1940',   place:'с. Вознесеновка',  gen:1, parents:[],           photo:'photos/Fekla1871.jpg',      bio:'неизвестно' },
-  { id:'p3',  name:'Савин Иосиф Васильевич',                    years:'–1934',       place:'с. Вознесеновка',  gen:2, parents:['p1','p2'],   photo:'photos/Iosif1934.jpg',      bio:'неизвестно' },
-  { id:'p4',  name:'Савин Петр Васильевич',                     years:'-1970',       place:'с. Вознесеновка',  gen:2, parents:['p1','p2'],   photo:'photos/Petr1970.jpg',       bio:'неизвестно' },
-  { id:'p5',  name:'Савин Александр Васильевич',                years:'-1972',       place:'с. Вознесеновка',  gen:2, parents:['p1','p2'],   photo:'photos/Alex1972.jpg',       bio:'неизвестно' },
-  { id:'p6',  name:'Савин Федор Васильевич',                    years:'1889-1960',   place:'с. Вознесеновка',  gen:2, parents:['p1','p2'],   photo:'photos/Fedor1889.jpg',      bio:'с 1940-х жил в Белогорске, похоронен в Белогорске' },
-  { id:'p8',  name:'Савина Евдокия Андреевна',                  years:'1905–1985',   place:'г. Тверь',         gen:2, parents:[],           photo:'photos/evdokiya.jpg',       bio:'Вошла в семью браком с Федором Васильевичем. Погибла в 1950-х, выпала из машины под колеса другой машины' },
-  { id:'p7',  name:'Савина Мария Васильевна',                   years:'1904–1990',   place:'г. Тверь',         gen:2, parents:['p1','p2'],   photo:'photos/MariyaVas.jpg',      bio:'неизвестно' },
-  { id:'p9',  name:'Савина Наталия Васильевна',                 years:'1904–1990',   place:'г. Тверь',         gen:2, parents:['p1','p2'],   photo:'photos/NataliyaVas.jpg',    bio:'неизвестно' },
-  { id:'p10', name:'Савин Кирилл Федорович',                    years:'1928–2001',   place:'г. Тверь',         gen:3, parents:['p6','p8'],   photo:null,                        bio:'Инженер-электрик. Всю жизнь собирал семейный фотоархив.' },
-  { id:'p12', name:'Савин Иван Федорович',                      years:'–29.08.1988', place:'с. Вознесеновка',  gen:3, parents:['p6','p8'],   photo:'photos/IvanFedorovich.jpg', bio:'Учился в Амурском индустриальном техникуме в г.Благовещенске. Похоронен в г.Херсоне' },
-  { id:'p11', name:'Савина Мария Васильевна',                   years:'19–',         place:'с. Вознесеновка',  gen:3, parents:[],           photo:null,                        bio:'Вошла в семью браком с Иваном Федоровичем' },
-  { id:'p13', name:'Гузь (Савина) Анна Федоровна',             years:'1926–1999',   place:'г. Тверь',         gen:3, parents:['p6','p8'],   photo:'photos/AnnaGuzNEW.jpg',        bio:'' },
-  { id:'p14', name:'Гузь Иван Иванович',                        years:'неизвестно',  place:'с. Вознесеновка',  gen:3, parents:[],           photo:'photos/GuzIvIv.jpg',        bio:'' },
-  { id:'p15', name:'Савина Мария Федоровна',                    years:'1931–2015',   place:'г. Москва',        gen:3, parents:['p6','p8'],   photo:null,                        bio:'' },
-  { id:'p16', name:'Савина Лидия Федоровна',                    years:'неизвестно',  place:'г. Москва',        gen:3, parents:['p6','p8'],   photo:null,                        bio:'' },
-  { id:'p17', name:'Гузь Леонид Иванович',                      years:'1931–2015',   place:'г. Белогорск',     gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
-  { id:'p18', name:'Особливец (Гузь) Вера Ивановна',           years:'19-',         place:'г. Москва',        gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
-  { id:'p32', name:'Особливец Михаил Леонтьевич',               years:'19-',         place:'г. Москва',        gen:4, parents:[],           photo:null,                        bio:'' },
-  { id:'p19', name:'Гузь Виктор Иванович',                      years:'1941–2011',   place:'г. Москва',        gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
-  { id:'p20', name:'Гузь (Рубан) Юлия Николаевна',             years:'1941–2024',   place:'г. Москва',        gen:4, parents:[],           photo:null,                        bio:'' },
-  { id:'p21', name:'Осипенко (Гузь) Зинаида Ивановна',         years:'1931–2015',   place:'г. Владивосток',   gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
-  { id:'p22', name:'Будникова (Гузь) Надежда Ивановна',        years:'1931–2015',   place:'г. Белогорск',     gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
-  { id:'p23', name:'Особливец Владимир Михайлович',             years:'1931–2015',   place:'г. Херсон',        gen:5, parents:['p18','p32'], photo:null,                        bio:'' },
-  { id:'p24', name:'Особливец Андрей Михайлович',               years:'1961–',       place:'Чехия',            gen:5, parents:['p18','p32'], photo:null,                        bio:'' },
-  { id:'p25', name:'Особливец Михаил Михайлович',               years:'1956-2022',   place:'Казахстан',        gen:5, parents:['p18','p32'], photo:null,                        bio:'' },
-  { id:'p26', name:'Особливец (Груздова) Лилия',                years:'1961-',       place:'г. Москва',        gen:5, parents:[],           photo:null,                        bio:'' },
-  { id:'p27', name:'Афонина (Гузь) Оксана Викторовна',         years:'1966-',       place:'г. Пушкин',        gen:5, parents:['p19','p20'], photo:null,                        bio:'' },
-  { id:'p28', name:'Афонин Юрий Викторович',                    years:'1965-2023',   place:'г. Пушкин',        gen:5, parents:[],           photo:null,                        bio:'' },
-  { id:'p29', name:'Остапенко (Гузь) Татьяна Викторовна',      years:'1973-',       place:'г. Пушкин',        gen:5, parents:['p19','p20'], photo:null,                        bio:'' },
-  { id:'p30', name:'Побережная (Афонина) Анастасия Юрьевна',   years:'1989–',       place:'г. Пушкин',        gen:6, parents:['p27','p28'], photo:null,                        bio:'' },
-  { id:'p33', name:'Побережный Александр Павлович',             years:'1990–',       place:'г. Пушкин',        gen:6, parents:[],           photo:null,                        bio:'' },
-  { id:'p31', name:'Фролова (Афонина) Снежана Юрьевна',        years:'1992–',       place:'г. Пушкин',        gen:6, parents:['p27','p28'], photo:null,                        bio:'' },
-  { id:'p34', name:'Савина Ирина Ивановна',                     years:'1947-',       place:'г. Южно-Сахалинск',gen:4, parents:['p12','p11'], photo:null,                        bio:'' },
-  { id:'p35', name:'Савин Владислав Иванович',                  years:'',            place:'',                 gen:4, parents:['p12','p11'], photo:null,                        bio:'' },
-  { id:'p36', name:'Савина Алла Федоровна',                     years:'',            place:'',                 gen:4, parents:[],           photo:null,                        bio:'Вошла в семью браком с Савиным Владиславом Ивановичем' },
-  { id:'p37', name:'Савин Евгений Иванович',                    years:'1940-1985',   place:'г. Оха',           gen:4, parents:['p12','p11'], photo:null,                        bio:'Жил в г.Южно-Сахалинск, работал телемастером.' },
-  { id:'p38', name:'Савин Геннадий Иванович',                   years:'19-1987',     place:'г. Канск',         gen:4, parents:['p12','p11'], photo:null,                        bio:'Родился в г.Канск. Работал пожарным в г. Партизанск.' },
-  { id:'p39', name:'Савин Андрей Владиславович',                years:'1956-2019',   place:'г. Владивосток',   gen:5, parents:['p35','p36'], photo:null,                        bio:'Офицер вооруженных сил СССР и РФ, капитан. Умер от онкологии 22.12.2019г.' },
-  { id:'p40', name:'Савина (Рубайко) Наталья Юрьевна',         years:'1956-2017',   place:'г. Иваново',       gen:5, parents:[],           photo:null,                        bio:'Вошла в семью браком с Савиным Андреем Владиславовичем в 1977г. Умерла от онкологии 14.09.2017г.' },
-  { id:'p41', name:'Савин Денис Андреевич',                     years:'1979-',       place:'г. Иваново',       gen:6, parents:['p39','p40'], photo:null,                        bio:'' },
-  { id:'p42', name:'Савина (Абакумова) Ульяна Валерьевна',      years:'1980-',       place:'г. Иваново',       gen:6, parents:[],           photo:null,                        bio:'Вошла в семью браком с Савиным Денисом Андреевичем' },
-  { id:'p43', name:'Савина (Мухамадеева) Асия Валенуровна',     years:'1982-',       place:'г. Кемерово',      gen:6, parents:[],           photo:null,                        bio:'Вошла в семью браком с Савиным Денисом Андреевичем' },
-  { id:'p44', name:'Хомская (Савина) Дарья Андреевна',         years:'1986-',       place:'г. Воркута',       gen:6, parents:['p39','p40'], photo:null,                        bio:'' },
-  { id:'p45', name:'Хомский Марк Николаевич',                   years:'',            place:'',                 gen:6, parents:[],           photo:null,                        bio:'' },
-  { id:'p46', name:'Дмитриева (Савина) Ярослава Денисовна',    years:'2001-',       place:'г. Иваново',       gen:7, parents:['p41','p42'], photo:null,                        bio:'' },
-  { id:'p47', name:'Савина Алиса Денисовна',                    years:'2013-',       place:'г. Москва',        gen:7, parents:['p41','p43'], photo:null,                        bio:'' },
-  { id:'p48', name:'Савина Таисия Денисовна',                   years:'2017-',       place:'г. Москва',        gen:7, parents:['p41','p43'], photo:null,                        bio:'' },
-  { id:'p49', name:'Хомская Николь Марковна',                   years:'2006-',       place:'г. Иваново',       gen:7, parents:['p44','p45'], photo:null,                        bio:'' },
-  { id:'p50', name:'Хомская Василиса Марковна',                 years:'2014-',       place:'г. Иваново',       gen:7, parents:['p44','p45'], photo:null,                        bio:'' },
-];
+// Инициализируем дерево через data-loader
+let PEOPLE = [];
+
+async function initTree(){
+  try {
+    PEOPLE = await SavinTreeData.loadPeople();
+    
+    // Пересчитываем индексы после загрузки
+    const byId = Object.fromEntries(PEOPLE.map(p => [p.id, p]));
+    const childrenOf = {};
+    PEOPLE.forEach(p => (p.parents || []).forEach(pid => {
+      (childrenOf[pid] = childrenOf[pid] || []).push(p.id);
+    }));
+    
+    // Обновляем глобальные переменные для остального кода
+    window.byId = byId;
+    window.childrenOf = childrenOf;
+    
+    // Перерисовываем дерево
+    document.getElementById('tree-inner').innerHTML = '<svg class="connections" id="svg-lines"></svg>';
+    renderTree();
+    
+    console.log('Tree initialized with', PEOPLE.length, 'people');
+  } catch (err) {
+    console.error('Failed to initialize tree:', err);
+    alert('Ошибка при загрузке данных дерева');
+  }
+}
+
+function renderTree(){
+  const treeInner = document.getElementById('tree-inner');
+  const genNumbers = [...new Set(PEOPLE.map(p => p.gen))].sort((a,b) => a - b);
+  
+  // Очищаем и перерисовываем
+  treeInner.innerHTML = '<svg class="connections" id="svg-lines"></svg>';
+  
+  genNumbers.forEach(gen => {
+    const row = document.createElement('div');
+    row.className = 'gen-row'; 
+    row.dataset.gen = gen;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'gen-label';
+    const genYears = computeGenYears(gen);
+    lbl.innerHTML = `<span class="n">Поколение ${gen}</span><span class="years">${genYears}</span>`;
+    row.appendChild(lbl);
+
+    const track = document.createElement('div');
+    track.className = 'gen-track';
+
+    PEOPLE.filter(p => p.gen === gen).forEach((p, i) => {
+      const card = document.createElement('button');
+      card.type = 'button'; 
+      card.className = 'card'; 
+      card.dataset.id = p.id;
+      card.style.setProperty('--tilt', (i % 2 === 0 ? -1 : 1) * (1 + (i % 3)) + 'deg');
+      
+      const initials = p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
+      card.innerHTML = `
+        <div class="photo">${p.photo
+          ? `<img src="${p.photo}" alt="${p.name}">`
+          : `<span class="initials">${initials}</span>`}</div>
+        <div class="name">${p.name}</div>
+        <div class="yrs">${p.years}</div>`;
+      
+      card.addEventListener('click', () => selectPerson(p.id));
+      track.appendChild(card);
+    });
+
+    row.appendChild(track);
+    treeInner.appendChild(row);
+  });
+  
+  // Перерисовываем линии
+  drawLines();
+}
+
+// Инициализируем при загрузке
+document.addEventListener('DOMContentLoaded', initTree);
+
+// Слушаем изменения данных
+window.addEventListener('savin-tree-data-changed', initTree);
 
 /* ── Индексы ── */
 const byId = Object.fromEntries(PEOPLE.map(p => [p.id, p]));
@@ -1119,18 +1270,33 @@ function openPanel(id) {
   panelBody.innerHTML = `
     <div class="photo-lg">${p.photo
       ? `<img src="${p.photo}" alt="${p.name}">`
-      : `<span class="initials">${initials(p.name)}</span>`}</div>
+      : `<span class="initials">${(p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase())}</span>`}</div>
     <h2>${p.name}</h2>
     <div class="meta">${p.years}${p.place ? ` &middot; <span class="place">${p.place}</span>` : ''}</div>
+    <button id="edit-btn" type="button" class="chip" style="margin-bottom:16px;">✏️ Редактировать</button>
     ${p.bio ? `<p class="bio">${p.bio}</p>` : ''}
     <div class="rel-block"><div class="rel-title">Родители</div>${relList(p.parents, 'Неизвестны')}</div>
     <div class="rel-block"><div class="rel-title">Дети</div>${relList(childrenOf[id], 'Нет данных')}</div>`;
+  
   panelBody.querySelectorAll('[data-jump]').forEach(chip => {
     chip.addEventListener('click', () => {
       selectPerson(chip.dataset.jump);
       cardEl(chip.dataset.jump)?.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
     });
   });
+
+  // Добавляем обработчик кнопки редактирования
+  const editBtn = panelBody.querySelector('#edit-btn');
+  if (editBtn) {
+    editBtn.addEventListener('click', () => {
+      // Загружаем актуальные данные и открываем редактор
+      SavinTreeData.loadPeople().then(merged => {
+        const person = merged.find(p => p.id === id);
+        if (person) SavinTreeEditor.openEditor(person);
+      });
+    });
+  }
+
   overlay.classList.add('open');
   panel.classList.add('open');
   panel.setAttribute('aria-hidden', 'false');
@@ -1165,5 +1331,36 @@ document.getElementById('search').addEventListener('input', e => {
   noResults.classList.toggle('show', !matches.length);
 });
 </script>
+
+<!-- Панель редактирования персоны -->
+<div id="editor-panel" class="editor-panel" style="display:none;">
+  <div class="editor-content">
+    <h3>Редактирование персоны</h3>
+    <div class="editor-field">
+      <label for="edit-name">Имя</label>
+      <input id="edit-name" type="text" placeholder="ФИО"/>
+    </div>
+    <div class="editor-field">
+      <label for="edit-years">Годы жизни</label>
+      <input id="edit-years" type="text" placeholder="1850-1920"/>
+    </div>
+    <div class="editor-field">
+      <label for="edit-place">Место</label>
+      <input id="edit-place" type="text" placeholder="село, город"/>
+    </div>
+    <div class="editor-field">
+      <label for="edit-bio">Биография</label>
+      <textarea id="edit-bio" placeholder="Примечания и биографические данные"></textarea>
+    </div>
+    <div class="editor-field">
+      <label for="edit-photo">Фото URL</label>
+      <input id="edit-photo" type="text" placeholder="photos/name.jpg"/>
+    </div>
+    <div class="editor-buttons">
+      <button id="save-edit" type="button" class="btn-primary">Сохранить</button>
+      <button id="cancel-edit" type="button" class="btn-secondary">Отмена</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
