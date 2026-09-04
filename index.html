@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Родословная</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap&subset=cyrillic" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #14181c;
+    --bg-deep: #0e1114;
+    --paper: #ece1c8;
+    --paper-shadow: #b8a476;
+    --ink: #ece7dd;
+    --ink-soft: #9b988e;
+    --ink-faint: #6a6860;
+    --brass: #b8925a;
+    --brass-bright: #d9ac6f;
+    --rust: #9a5138;
+    --line: #b8925a;
+    --focus: #d9ac6f;
+  } 
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'PT Serif', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse at top left, rgba(184,146,90,0.06), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(184,146,90,0.05), transparent 55%);
+    min-height: 100vh;
+  }
+
+  ::selection { background: var(--brass); color: #14181c; }
+  a { color: inherit; }
+
+  /* ── Header ── */
+  header.hero {
+    padding: 56px 32px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-bottom: 1px solid rgba(184,146,90,0.2);
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin: 0 0 14px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.05;
+    margin: 0 0 16px;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  h1 em { font-style: italic; font-weight: 500; color: var(--brass-bright); }
+
+  .hero-sub {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0 0 28px;
+  }
+
+  .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 28px; }
+  .stat { font-family: 'JetBrains Mono', monospace; }
+  .stat .num { display: block; font-size: 26px; color: var(--paper); font-weight: 600; }
+  .stat .label { display: block; font-size: 12px; color: var(--ink-faint); letter-spacing: 0.04em; margin-top: 2px; }
+
+  .search-row { display: flex; gap: 10px; max-width: 420px; align-items: center; }
+
+  #search {
+    flex: 1;
+    background: rgba(236,225,200,0.05);
+    border: 1px solid rgba(184,146,90,0.35);
+    color: var(--ink);
+    font-family: 'PT Serif', serif;
+    font-size: 15px;
+    padding: 11px 14px;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  #search::placeholder { color: var(--ink-faint); }
+  #search:focus { border-color: var(--brass-bright); background: rgba(236,225,200,0.08); }
+  #search:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  #reset-btn {
+    background: transparent;
+    border: 1px solid rgba(184,146,90,0.35);
+    color: var(--brass);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 11px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, background 0.15s ease;
+  }
+  #reset-btn.visible { opacity: 1; pointer-events: auto; }
+  #reset-btn:hover { background: rgba(184,146,90,0.12); }
+  #reset-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  /* ── Relation Finder ── */
+  .relation-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 36px 32px 0;
+    border-bottom: 1px solid rgba(184,146,90,0.12);
+  }
+  .relation-section .section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin: 0 0 16px;
+  }
+  .relation-inputs {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 20px;
+  }
+  .relation-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 200px;
+    max-width: 340px;
+    position: relative;
+  }
+  .relation-field label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .relation-field input {
+    background: rgba(236,225,200,0.05);
+    border: 1px solid rgba(184,146,90,0.35);
+    color: var(--ink);
+    font-family: 'PT Serif', serif;
+    font-size: 15px;
+    padding: 11px 14px;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    width: 100%;
+  }
+  .relation-field input::placeholder { color: var(--ink-faint); }
+  .relation-field input:focus { border-color: var(--brass-bright); background: rgba(236,225,200,0.08); }
+  .relation-field input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .autocomplete-list {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: #1a1e24;
+    border: 1px solid rgba(184,146,90,0.4);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    z-index: 100;
+    max-height: 220px;
+    overflow-y: auto;
+    display: none;
+    scrollbar-color: var(--brass) transparent;
+  }
+  .autocomplete-list.open { display: block; }
+  .autocomplete-list::-webkit-scrollbar { width: 6px; }
+  .autocomplete-list::-webkit-scrollbar-track { background: transparent; }
+  .autocomplete-list::-webkit-scrollbar-thumb { background: rgba(184,146,90,0.4); border-radius: 3px; }
+  .autocomplete-item {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-bottom: 1px solid rgba(184,146,90,0.1);
+    transition: background 0.1s ease, color 0.1s ease;
+  }
+  .autocomplete-item:last-child { border-bottom: none; }
+  .autocomplete-item:hover, .autocomplete-item.highlighted {
+    background: rgba(184,146,90,0.12); color: var(--ink);
+  }
+  .autocomplete-item .years-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--ink-faint); margin-left: 8px;
+  }
+
+  .relation-btn {
+    background: rgba(184,146,90,0.12);
+    border: 1px solid rgba(184,146,90,0.45);
+    color: var(--brass-bright);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.06em;
+    padding: 11px 20px; border-radius: 3px;
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    align-self: flex-end; height: 44px;
+  }
+  .relation-btn:hover { background: rgba(184,146,90,0.22); border-color: var(--brass-bright); color: var(--paper); }
+  .relation-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .relation-result {
+    padding: 18px 20px; margin-bottom: 28px;
+    border-radius: 4px; border-left: 3px solid var(--brass);
+    background: rgba(184,146,90,0.06);
+    display: none; animation: fadeIn 0.2s ease;
+  }
+  .relation-result.show { display: block; }
+  .relation-result.error { border-left-color: var(--rust); background: rgba(154,81,56,0.08); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .relation-result .result-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--ink-faint);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .relation-result .result-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; color: var(--paper); line-height: 1.3; margin-bottom: 6px;
+  }
+  .relation-result .result-text em { font-style: italic; color: var(--brass-bright); }
+  .relation-result .result-path {
+    font-size: 13px; color: var(--ink-faint); line-height: 1.6;
+    margin-top: 12px; font-family: 'PT Serif', serif; font-style: italic;
+  }
+  .relation-result .result-path span { color: var(--ink-soft); }
+
+  /* ── Tree ── */
+  .tree-wrap { max-width: 1100px; margin: 0 auto; padding: 36px 0 80px; }
+  .tree-scroll {
+    overflow-x: auto; overflow-y: hidden;
+    padding: 4px 32px 28px; scrollbar-color: var(--brass) transparent;
+  }
+  .tree-scroll::-webkit-scrollbar { height: 8px; }
+  .tree-scroll::-webkit-scrollbar-track { background: transparent; }
+  .tree-scroll::-webkit-scrollbar-thumb { background: rgba(184,146,90,0.4); border-radius: 4px; }
+  .tree-inner {
+    position: relative; width: max-content;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  svg.connections {
+    position: absolute; top: 0; left: 0;
+    pointer-events: none; overflow: visible;
+  }
+  svg.connections path {
+    fill: none; stroke: var(--line); stroke-width: 1.4;
+    opacity: 0.38; stroke-linecap: round;
+    transition: opacity 0.25s ease, stroke-width 0.25s ease;
+  }
+  svg.connections path.active { opacity: 0.95; stroke: var(--brass-bright); stroke-width: 2; }
+  svg.connections path.dim { opacity: 0.08; }
+
+  .gen-row { display: flex; align-items: stretch; min-height: 150px; }
+  .gen-label {
+    position: sticky; left: 0; z-index: 3;
+    display: flex; flex-direction: column; justify-content: center;
+    width: 128px; flex: 0 0 128px;
+    padding: 10px 18px 10px 0;
+    background: linear-gradient(90deg, var(--bg) 72%, transparent);
+  }
+  .gen-label .n {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--rust); background: rgba(154,81,56,0.15);
+    border: 1px solid rgba(154,81,56,0.4);
+    display: inline-block; padding: 2px 7px; border-radius: 2px;
+    width: fit-content; letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+  .gen-label .years {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 15px; color: var(--ink-soft); line-height: 1.3;
+  }
+  .gen-track { display: flex; gap: 22px; padding: 14px 24px 14px 0; align-items: flex-start; }
+
+  /* ── Cards ── */
+  .card {
+    flex: 0 0 auto; width: 122px;
+    background: none; border: none; padding: 0;
+    cursor: pointer; font-family: inherit; text-align: left;
+    transition: opacity 0.25s ease, transform 0.15s ease;
+  }
+  .card:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+  .card.dim { opacity: 0.22; }
+  .card .photo {
+    position: relative; width: 100%; aspect-ratio: 4/5;
+    background: linear-gradient(155deg, var(--paper), #d8c89b);
+    border: 6px solid var(--paper);
+    box-shadow: 0 3px 0 var(--paper-shadow), 0 8px 18px rgba(0,0,0,0.45);
+    transform: rotate(var(--tilt, -1.4deg));
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .card .photo img { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.35) contrast(1.02); }
+  .card .photo .initials {
+    font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700;
+    color: #7a6947; opacity: 0.55;
+  }
+  .card .photo::after {
+    content: ''; position: absolute; top: -8px; left: 50%;
+    width: 34px; height: 14px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(217,172,111,0.35); border: 1px solid rgba(217,172,111,0.5);
+  }
+  .card:hover .photo, .card.active .photo {
+    transform: rotate(0deg) translateY(-3px);
+    box-shadow: 0 4px 0 var(--brass-bright), 0 12px 22px rgba(0,0,0,0.5);
+  }
+  .card.active .photo { border-color: var(--brass-bright); }
+  .card.relation-a .photo {
+    border-color: oklch(65% 0.14 250);
+    box-shadow: 0 4px 0 oklch(50% 0.14 250), 0 12px 22px rgba(0,0,0,0.5);
+    transform: rotate(0deg) translateY(-3px);
+  }
+  .card.relation-b .photo {
+    border-color: oklch(70% 0.13 145);
+    box-shadow: 0 4px 0 oklch(52% 0.13 145), 0 12px 22px rgba(0,0,0,0.5);
+    transform: rotate(0deg) translateY(-3px);
+  }
+  .card .name { margin-top: 10px; font-size: 13px; line-height: 1.3; color: var(--ink); }
+  .card .yrs { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-faint); margin-top: 2px; }
+
+  .no-results { color: var(--ink-faint); font-style: italic; padding: 40px 32px; display: none; }
+  .no-results.show { display: block; }
+
+  /* ── Detail panel ── */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(10,12,14,0.55);
+    opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 10;
+  }
+  .overlay.open { opacity: 1; pointer-events: auto; }
+  .panel {
+    position: fixed; top: 0; right: 0; height: 100%;
+    width: 380px; max-width: 92vw;
+    background: var(--bg-deep); border-left: 1px solid rgba(184,146,90,0.3);
+    transform: translateX(100%); transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+    z-index: 11; overflow-y: auto; padding: 28px 26px 40px;
+  }
+  .panel.open { transform: translateX(0); }
+  .panel-close {
+    background: none; border: 1px solid rgba(184,146,90,0.35);
+    color: var(--brass); width: 32px; height: 32px; border-radius: 3px;
+    cursor: pointer; font-size: 16px; line-height: 1; margin-bottom: 22px;
+  }
+  .panel-close:hover { background: rgba(184,146,90,0.12); }
+  .panel-close:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .panel .photo-lg {
+    width: 148px; aspect-ratio: 4/5;
+    background: linear-gradient(155deg, var(--paper), #d8c89b);
+    border: 8px solid var(--paper);
+    box-shadow: 0 4px 0 var(--paper-shadow), 0 10px 20px rgba(0,0,0,0.45);
+    transform: rotate(-1.4deg);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 22px; overflow: hidden;
+  }
+  .panel .photo-lg img { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.35) contrast(1.02); }
+  .panel .photo-lg .initials { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: #7a6947; opacity: 0.55; }
+  .panel h2 { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.2; margin: 0 0 6px; color: var(--paper); }
+  .panel .meta { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--brass); margin-bottom: 18px; }
+  .panel .meta .place { color: var(--ink-faint); }
+  .panel p.bio { font-size: 15px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 26px; }
+  .panel .rel-block { margin-bottom: 20px; }
+  .panel .rel-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px;
+  }
+  .chip {
+    display: inline-flex; align-items: center;
+    background: rgba(184,146,90,0.1); border: 1px solid rgba(184,146,90,0.3);
+    color: var(--ink); font-size: 13px; padding: 6px 11px; border-radius: 20px;
+    margin: 0 6px 6px 0; cursor: pointer; font-family: 'PT Serif', serif;
+  }
+  .chip:hover { background: rgba(184,146,90,0.2); border-color: var(--brass-bright); }
+  .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  footer {
+    text-align: center; padding: 30px 20px 50px;
+    color: var(--ink-faint); font-size: 12.5px; font-family: 'JetBrains Mono', monospace;
+  }
+
+  @media (max-width: 640px) {
+    header.hero { padding: 40px 20px 28px; }
+    .tree-scroll { padding: 4px 20px 24px; }
+    .gen-label { width: 96px; flex-basis: 96px; }
+    .panel { width: 100%; max-width: 100%; }
+    .relation-section { padding: 28px 20px 0; }
+    .relation-inputs { flex-direction: column; }
+    .relation-field { max-width: 100%; }
+    .relation-btn { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="eyebrow">Семейный архив &middot; 6 поколений</p>
+  <h1>Родословная <em>рода Савиных</em></h1>
+  <p class="hero-sub">
+    От села Вознесеновка (Благовещенск), 1872 год, до наших дней. Нажмите на карточку, чтобы
+    увидеть человека подробнее и проследить его линию вверх и вниз по дереву.
+  </p>
+  <div class="hero-stats">
+    <div class="stat"><span class="num" id="stat-people">—</span><span class="label">человек в дереве</span></div>
+    <div class="stat"><span class="num" id="stat-gens">6</span><span class="label">поколений</span></div>
+    <div class="stat"><span class="num">1872</span><span class="label">самая ранняя фотография</span></div>
+  </div>
+  <div class="search-row">
+    <input id="search" type="text" placeholder="Найти человека по имени…" autocomplete="off">
+    <button id="reset-btn" type="button">Сбросить</button>
+  </div>
+</header>
+
+<section class="relation-section" aria-label="Найти родственную связь">
+  <p class="section-title">Найти родственную связь</p>
+  <div class="relation-inputs">
+    <div class="relation-field">
+      <label for="rel-input-a">Первый человек</label>
+      <input id="rel-input-a" type="text" placeholder="Начните вводить имя…" autocomplete="off"
+             aria-autocomplete="list" aria-controls="ac-list-a">
+      <div class="autocomplete-list" id="ac-list-a" role="listbox"></div>
+    </div>
+    <div class="relation-field">
+      <label for="rel-input-b">Второй человек</label>
+      <input id="rel-input-b" type="text" placeholder="Начните вводить имя…" autocomplete="off"
+             aria-autocomplete="list" aria-controls="ac-list-b">
+      <div class="autocomplete-list" id="ac-list-b" role="listbox"></div>
+    </div>
+    <button class="relation-btn" id="find-relation-btn" type="button">Определить связь</button>
+  </div>
+  <div class="relation-result" id="relation-result" role="status" aria-live="polite">
+    <div class="result-label">Результат</div>
+    <div class="result-text" id="result-text"></div>
+    <div class="result-path" id="result-path"></div>
+  </div>
+</section>
+
+<div class="tree-wrap">
+  <div class="tree-scroll">
+    <div class="tree-inner" id="tree-inner">
+      <svg class="connections" id="svg-lines"></svg>
+    </div>
+  </div>
+  <p class="no-results" id="no-results">Никого не нашлось. Проверьте написание или нажмите «Сбросить».</p>
+</div>
+
+<footer>прототип · замените данные в PEOPLE и фотографии — см. README.md</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="panel" id="panel" aria-hidden="true">
+  <button class="panel-close" id="panel-close" aria-label="Закрыть">&times;</button>
+  <div id="panel-body"></div>
+</aside>
+
+<script>
+/* =====================================================================
+   ДАННЫЕ
+   ===================================================================== */
+const PEOPLE = [
+  { id:'p1',  name:'Савин Василий Петрович',                   years:'1870-1938',   place:'с. Вознесеновка',  gen:1, parents:[],           photo:'photos/Vasilii1870.jpg',    bio:'неизвестно' },
+  { id:'p2',  name:'Савина Фекла Кузьминична',                  years:'1871–1940',   place:'с. Вознесеновка',  gen:1, parents:[],           photo:'photos/Fekla1871.jpg',      bio:'неизвестно' },
+  { id:'p3',  name:'Савин Иосиф Васильевич',                    years:'–1934',       place:'с. Вознесеновка',  gen:2, parents:['p1','p2'],   photo:'photos/Iosif1934.jpg',      bio:'неизвестно' },
+  { id:'p4',  name:'Савин Петр Васильевич',                     years:'-1970',       place:'с. Вознесеновка',  gen:2, parents:['p1','p2'],   photo:'photos/Petr1970.jpg',       bio:'неизвестно' },
+  { id:'p5',  name:'Савин Александр Васильевич',                years:'-1972',       place:'с. Вознесеновка',  gen:2, parents:['p1','p2'],   photo:'photos/Alex1972.jpg',       bio:'неизвестно' },
+  { id:'p6',  name:'Савин Федор Васильевич',                    years:'1889-1960',   place:'с. Вознесеновка',  gen:2, parents:['p1','p2'],   photo:'photos/Fedor1889.jpg',      bio:'с 1940-х жил в Белогорске, похоронен в Белогорске' },
+  { id:'p8',  name:'Савина Евдокия Андреевна',                  years:'1905–1985',   place:'г. Тверь',         gen:2, parents:[],           photo:'photos/evdokiya.jpg',       bio:'Вошла в семью браком с Федором Васильевичем. Погибла в 1950-х, выпала из машины под колеса другой машины' },
+  { id:'p7',  name:'Савина Мария Васильевна',                   years:'1904–1990',   place:'г. Тверь',         gen:2, parents:['p1','p2'],   photo:'photos/MariyaVas.jpg',      bio:'неизвестно' },
+  { id:'p9',  name:'Савина Наталия Васильевна',                 years:'1904–1990',   place:'г. Тверь',         gen:2, parents:['p1','p2'],   photo:'photos/NataliyaVas.jpg',    bio:'неизвестно' },
+  { id:'p10', name:'Савин Кирилл Федорович',                    years:'1928–2001',   place:'г. Тверь',         gen:3, parents:['p6','p8'],   photo:null,                        bio:'Инженер-электрик. Всю жизнь собирал семейный фотоархив.' },
+  { id:'p12', name:'Савин Иван Федорович',                      years:'–29.08.1988', place:'с. Вознесеновка',  gen:3, parents:['p6','p8'],   photo:'photos/IvanFedorovich.jpg', bio:'Учился в Амурском индустриальном техникуме в г.Благовещенске. Похоронен в г.Херсоне' },
+  { id:'p11', name:'Савина Мария Васильевна',                   years:'19–',         place:'с. Вознесеновка',  gen:3, parents:[],           photo:null,                        bio:'Вошла в семью браком с Иваном Федоровичем' },
+  { id:'p13', name:'Гузь (Савина) Анна Федоровна',             years:'1926–1999',   place:'г. Тверь',         gen:3, parents:['p6','p8'],   photo:'photos/AnnaGuzNEW.jpg',        bio:'' },
+  { id:'p14', name:'Гузь Иван Иванович',                        years:'неизвестно',  place:'с. Вознесеновка',  gen:3, parents:[],           photo:'photos/GuzIvIv.jpg',        bio:'' },
+  { id:'p15', name:'Савина Мария Федоровна',                    years:'1931–2015',   place:'г. Москва',        gen:3, parents:['p6','p8'],   photo:null,                        bio:'' },
+  { id:'p16', name:'Савина Лидия Федоровна',                    years:'неизвестно',  place:'г. Москва',        gen:3, parents:['p6','p8'],   photo:null,                        bio:'' },
+  { id:'p17', name:'Гузь Леонид Иванович',                      years:'1931–2015',   place:'г. Белогорск',     gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
+  { id:'p18', name:'Особливец (Гузь) Вера Ивановна',           years:'19-',         place:'г. Москва',        gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
+  { id:'p32', name:'Особливец Михаил Леонтьевич',               years:'19-',         place:'г. Москва',        gen:4, parents:[],           photo:null,                        bio:'' },
+  { id:'p19', name:'Гузь Виктор Иванович',                      years:'1941–2011',   place:'г. Москва',        gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
+  { id:'p20', name:'Гузь (Рубан) Юлия Николаевна',             years:'1941–2024',   place:'г. Москва',        gen:4, parents:[],           photo:null,                        bio:'' },
+  { id:'p21', name:'Осипенко (Гузь) Зинаида Ивановна',         years:'1931–2015',   place:'г. Владивосток',   gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
+  { id:'p22', name:'Будникова (Гузь) Надежда Ивановна',        years:'1931–2015',   place:'г. Белогорск',     gen:4, parents:['p13','p14'], photo:null,                        bio:'' },
+  { id:'p23', name:'Особливец Владимир Михайлович',             years:'1931–2015',   place:'г. Херсон',        gen:5, parents:['p18','p32'], photo:null,                        bio:'' },
+  { id:'p24', name:'Особливец Андрей Михайлович',               years:'1961–',       place:'Чехия',            gen:5, parents:['p18','p32'], photo:null,                        bio:'' },
+  { id:'p25', name:'Особливец Михаил Михайлович',               years:'1956-2022',   place:'Казахстан',        gen:5, parents:['p18','p32'], photo:null,                        bio:'' },
+  { id:'p26', name:'Особливец (Груздова) Лилия',                years:'1961-',       place:'г. Москва',        gen:5, parents:[],           photo:null,                        bio:'' },
+  { id:'p27', name:'Афонина (Гузь) Оксана Викторовна',         years:'1966-',       place:'г. Пушкин',        gen:5, parents:['p19','p20'], photo:null,                        bio:'' },
+  { id:'p28', name:'Афонин Юрий Викторович',                    years:'1965-2023',   place:'г. Пушкин',        gen:5, parents:[],           photo:null,                        bio:'' },
+  { id:'p29', name:'Остапенко (Гузь) Татьяна Викторовна',      years:'1973-',       place:'г. Пушкин',        gen:5, parents:['p19','p20'], photo:null,                        bio:'' },
+  { id:'p30', name:'Побережная (Афонина) Анастасия Юрьевна',   years:'1989–',       place:'г. Пушкин',        gen:6, parents:['p27','p28'], photo:null,                        bio:'' },
+  { id:'p33', name:'Побережный Александр Павлович',             years:'1990–',       place:'г. Пушкин',        gen:6, parents:[],           photo:null,                        bio:'' },
+  { id:'p31', name:'Фролова (Афонина) Снежана Юрьевна',        years:'1992–',       place:'г. Пушкин',        gen:6, parents:['p27','p28'], photo:null,                        bio:'' },
+  { id:'p34', name:'Савина Ирина Ивановна',                     years:'1947-',       place:'г. Южно-Сахалинск',gen:4, parents:['p12','p11'], photo:null,                        bio:'' },
+  { id:'p35', name:'Савин Владислав Иванович',                  years:'',            place:'',                 gen:4, parents:['p12','p11'], photo:null,                        bio:'' },
+  { id:'p36', name:'Савина Алла Федоровна',                     years:'',            place:'',                 gen:4, parents:[],           photo:null,                        bio:'Вошла в семью браком с Савиным Владиславом Ивановичем' },
+  { id:'p37', name:'Савин Евгений Иванович',                    years:'1940-1985',   place:'г. Оха',           gen:4, parents:['p12','p11'], photo:null,                        bio:'Жил в г.Южно-Сахалинск, работал телемастером.' },
+  { id:'p38', name:'Савин Геннадий Иванович',                   years:'19-1987',     place:'г. Канск',         gen:4, parents:['p12','p11'], photo:null,                        bio:'Родился в г.Канск. Работал пожарным в г. Партизанск.' },
+  { id:'p39', name:'Савин Андрей Владиславович',                years:'1956-2019',   place:'г. Владивосток',   gen:5, parents:['p35','p36'], photo:null,                        bio:'Офицер вооруженных сил СССР и РФ, капитан. Умер от онкологии 22.12.2019г.' },
+  { id:'p40', name:'Савина (Рубайко) Наталья Юрьевна',         years:'1956-2017',   place:'г. Иваново',       gen:5, parents:[],           photo:null,                        bio:'Вошла в семью браком с Савиным Андреем Владиславовичем в 1977г. Умерла от онкологии 14.09.2017г.' },
+  { id:'p41', name:'Савин Денис Андреевич',                     years:'1979-',       place:'г. Иваново',       gen:6, parents:['p39','p40'], photo:null,                        bio:'' },
+  { id:'p42', name:'Савина (Абакумова) Ульяна Валерьевна',      years:'1980-',       place:'г. Иваново',       gen:6, parents:[],           photo:null,                        bio:'Вошла в семью браком с Савиным Денисом Андреевичем' },
+  { id:'p43', name:'Савина (Мухамадеева) Асия Валенуровна',     years:'1982-',       place:'г. Кемерово',      gen:6, parents:[],           photo:null,                        bio:'Вошла в семью браком с Савиным Денисом Андреевичем' },
+  { id:'p44', name:'Хомская (Савина) Дарья Андреевна',         years:'1986-',       place:'г. Воркута',       gen:6, parents:['p39','p40'], photo:null,                        bio:'' },
+  { id:'p45', name:'Хомский Марк Николаевич',                   years:'',            place:'',                 gen:6, parents:[],           photo:null,                        bio:'' },
+  { id:'p46', name:'Дмитриева (Савина) Ярослава Денисовна',    years:'2001-',       place:'г. Иваново',       gen:7, parents:['p41','p42'], photo:null,                        bio:'' },
+  { id:'p47', name:'Савина Алиса Денисовна',                    years:'2013-',       place:'г. Москва',        gen:7, parents:['p41','p43'], photo:null,                        bio:'' },
+  { id:'p48', name:'Савина Таисия Денисовна',                   years:'2017-',       place:'г. Москва',        gen:7, parents:['p41','p43'], photo:null,                        bio:'' },
+  { id:'p49', name:'Хомская Николь Марковна',                   years:'2006-',       place:'г. Иваново',       gen:7, parents:['p44','p45'], photo:null,                        bio:'' },
+  { id:'p50', name:'Хомская Василиса Марковна',                 years:'2014-',       place:'г. Иваново',       gen:7, parents:['p44','p45'], photo:null,                        bio:'' },
+];
+
+/* ── Индексы ── */
+const byId = Object.fromEntries(PEOPLE.map(p => [p.id, p]));
+const childrenOf = {};
+PEOPLE.forEach(p => (p.parents || []).forEach(pid => {
+  (childrenOf[pid] = childrenOf[pid] || []).push(p.id);
+}));
+
+/* =====================================================================
+   АЛГОРИТМ РОДСТВА
+   Источник терминологии: русский словарь степеней родства.
+
+   Ключевые понятия:
+   - Брат/сестра            — дети одних родителей (distA=distB=1 от общего предка)
+   - Дядя/тётя              — брат/сестра отца или матери (dX=1, removal=1)
+   - Двоюродный дед/бабушка — брат/сестра деда или бабушки (dX=1, removal=2)
+   - Двоюродный брат/сестра — дети дяди или тётки (dX=dY=2)
+   - Двоюродная тётя/дядя   — двоюродный брат/сестра отца или матери (dX=2, removal=1)
+   - Двоюродная бабушка     — сестра деда или бабушки (dX=1, removal=2 ИЛИ dX=2, removal=0 от деда)
+   - Внучатый племянник     — внук брата или сестры (dX=1, removal=2, т.е. племянник племянника)
+   - Троюродный брат/сестра — дети двоюродного дяди/тётки (dX=dY=3)
+
+   Формула: distA и distB — расстояния от A и B до ближайшего общего предка.
+   Нормализуем: dX = min, dY = max; removal = dY - dX.
+   degree = dX - 1  (0=родные, 1=двоюродные, 2=троюродные, ...)
+   ===================================================================== */
+
+/**
+ * BFS — кратчайший путь в двунаправленном графе родитель↔ребёнок.
+ */
+function findPath(startId, endId) {
+  if (startId === endId) return [startId];
+  const visited = new Map([[startId, null]]);
+  const queue = [startId];
+  while (queue.length) {
+    const cur = queue.shift();
+    for (const nb of [...(byId[cur].parents || []), ...(childrenOf[cur] || [])]) {
+      if (!visited.has(nb)) {
+        visited.set(nb, cur);
+        if (nb === endId) {
+          const path = [];
+          let node = endId;
+          while (node !== null) { path.push(node); node = visited.get(node); }
+          return path.reverse();
+        }
+        queue.push(nb);
+      }
+    }
+  }
+  return null;
+}
+
+function pathSteps(path) {
+  return path.slice(0, -1).map((from, i) => {
+    const to = path[i + 1];
+    return { from, to, dir: (byId[from].parents || []).includes(to) ? 'up' : 'down' };
+  });
+}
+
+/** Все предки id с расстоянием (BFS вверх). */
+function ancestorsMap(id) {
+  const dist = new Map([[id, 0]]);
+  const queue = [[id, 0]];
+  while (queue.length) {
+    const [cur, d] = queue.shift();
+    for (const p of (byId[cur].parents || [])) {
+      if (!dist.has(p)) { dist.set(p, d + 1); queue.push([p, d + 1]); }
+    }
+  }
+  return dist;
+}
+
+/** Ближайший общий предок с расстояниями от A и B. */
+function closestCommonAncestor(idA, idB) {
+  const dA = ancestorsMap(idA);
+  const dB = ancestorsMap(idB);
+  let best = null;
+  for (const [anc, da] of dA) {
+    if (!dB.has(anc)) continue;
+    const db = dB.get(anc);
+    const sum = da + db;
+    if (!best || sum < best.sum || (sum === best.sum && Math.max(da,db) < Math.max(best.distA, best.distB))) {
+      best = { ancestor: anc, distA: da, distB: db, sum };
+    }
+  }
+  return best;
+}
+
+/** Пол: 'f' или 'm'. Эвристика по отчеству → фамилии → имени. */
+function guessGender(name) {
+  const parts = name.trim().split(/\s+/);
+  const patr = parts[2] || '';
+  if (/(?:овна|евна|ична|инична)$/i.test(patr)) return 'f';
+  if (/(?:ович|евич|ич)$/i.test(patr)) return 'm';
+  const surn = parts[0] || '';
+  if (/(?:ина|ова|ева|ская|цкая|ая)$/i.test(surn)) return 'f';
+  const fname = parts[1] || '';
+  if (/[аяАЯ]$/i.test(fname)) return 'f';
+  return 'm';
+}
+
+/** Главная функция. */
+function describeRelation(idA, idB) {
+  const gA = guessGender(byId[idA].name);
+  const gB = guessGender(byId[idB].name);
+  const path = findPath(idA, idB);
+  if (!path) return { label: 'Родственная связь не найдена', pathExplanation: 'Эти люди не связаны в дереве.' };
+
+  const steps = pathSteps(path);
+  const ups   = steps.filter(s => s.dir === 'up').length;
+  const downs = steps.filter(s => s.dir === 'down').length;
+  let label;
+
+  if (ups === 0) {
+    // A — предок B
+    label = directLineLabel(downs, gA, gB);
+  } else if (downs === 0) {
+    // B — предок A; показываем «B и A»
+    label = directLineLabel(ups, gB, gA, true);
+  } else {
+    const ca = closestCommonAncestor(idA, idB);
+    if (!ca) return { label: 'Дальние родственники', pathExplanation: buildPathText(path) };
+    label = lateralLabel(ca.distA, ca.distB, gA, gB);
+  }
+  return { label, pathExplanation: buildPathText(path) };
+}
+
+/* ── Прямая линия ── */
+function directLineLabel(dist, gAnc, gDesc, swap = false) {
+  /*
+   * Таблица по словарю:
+   * dist=1: отец/мать — сын/дочь
+   * dist=2: дед/бабушка — внук/внучка
+   * dist=3: прадед/прабабушка — правнук/правнучка
+   * dist=4: прапрадед/прапрабабушка — праправнук/праправнучка
+   * dist=5: прапрапрадед — пра-праправнук (далее: «пра» × (dist-2) + «дед»)
+   */
+  function ancTerm(g, d) {
+    if (d === 1) return g === 'f' ? 'мать'            : 'отец';
+    if (d === 2) return g === 'f' ? 'бабушка'         : 'дедушка';
+    if (d === 3) return g === 'f' ? 'прабабушка'      : 'прадедушка';
+    if (d === 4) return g === 'f' ? 'прапрабабушка'   : 'прапрадедушка';
+    const pra = 'пра'.repeat(d - 2);
+    return g === 'f' ? `${pra}прабабушка` : `${pra}прадедушка`;
+  }
+  function descTerm(g, d) {
+    if (d === 1) return g === 'f' ? 'дочь'            : 'сын';
+    if (d === 2) return g === 'f' ? 'внучка'          : 'внук';
+    if (d === 3) return g === 'f' ? 'правнучка'       : 'правнук';
+    if (d === 4) return g === 'f' ? 'праправнучка'    : 'праправнук';
+    const pra = 'пра'.repeat(d - 2);
+    return g === 'f' ? `${pra}праправнучка` : `${pra}праправнук`;
+  }
+  const at = ancTerm(gAnc, dist);
+  const dt = descTerm(gDesc, dist);
+  return swap ? `${dt} и ${at}` : `${at} и ${dt}`;
+}
+
+/* ── Боковое родство ── */
+function lateralLabel(distA, distB, gA, gB) {
+  /*
+   * Нормализуем: dX ≤ dY. gX — тот, кто ближе к общему предку.
+   * removal = dY - dX — сдвиг поколений.
+   * degree  = dX - 1  — степень кузенства.
+   *
+   * Соответствие словарю:
+   *
+   * dX=1, dY=1, removal=0:
+   *   → братья / сёстры / брат и сестра
+   *
+   * dX=1, removal=1:
+   *   → тётя/дядя + племянница/племянник
+   *
+   * dX=1, removal=2:
+   *   → двоюродная бабушка/дедушка + внучатая племянница/племянник
+   *   (словарь: «внучатый племянник — внук брата или сестры»)
+   *
+   * dX=1, removal=3:
+   *   → двоюродная прабабушка/прадедушка + правнучатый племянник
+   *   (словарь: «правнучатый племянник — правнук брата или сестры»)
+   *
+   * dX=2, dY=2, removal=0:
+   *   → двоюродные братья/сёстры  (словарь: «двоюродный брат — сын дяди или тётки»)
+   *
+   * dX=2, removal=1:
+   *   → двоюродная тётя/дядя + двоюродный племянник
+   *   (словарь: «двоюродная тётка — двоюродная сестра отца или матери»)
+   *
+   * dX=2, removal=2:
+   *   → двоюродная бабушка/дедушка + двоюродный внучатый племянник
+   *   (словарь: «двоюродная бабушка — сестра бабушки или деда»; «внучатый двоюродный племянник — внук двоюродного брата или сестры»)
+   *
+   * dX=2, removal=3:
+   *   → двоюродная прабабушка/прадедушка + двоюродный правнучатый племянник
+   *   (словарь: «правнучатый двоюродный племянник — правнук двоюродного брата или сестры»)
+   *
+   * dX=3, dY=3, removal=0:
+   *   → троюродные братья/сёстры
+   *
+   * dX=3, removal=1:
+   *   → троюродная тётя/дядя + троюродный племянник
+   *
+   * dX=3, removal=2:
+   *   → троюродная бабушка/дедушка + троюродный внучатый племянник
+   *   (словарь: «троюродная бабушка — двоюродная сестра деда или бабушки»)
+   *
+   * И так далее по схеме.
+   */
+
+  let dX = distA, dY = distB, gX = gA, gY = gB, swapped = false;
+  if (dX > dY) { [dX, dY] = [dY, dX]; [gX, gY] = [gY, gX]; swapped = true; }
+  const removal = dY - dX;
+
+  /* степень кузенства: 0=родные, 1=двоюродные, 2=троюродные, ... */
+  const degree = dX - 1;
+
+  /* Префиксы для N-юродных: degree=1→"дво", 2→"тро", ... */
+  const PREF = ['', 'дво', 'тро', 'четверо', 'пяти', 'шести', 'семи', 'восьми', 'девяти', 'десяти'];
+  const pref = degree < PREF.length ? PREF[degree] : `${degree + 1}-`;
+
+  /* Для degree=0 (родная линия через общего предка) отдельная ветка */
+  if (degree === 0) {
+    // dX === 1
+    if (removal === 0) return siblingLabel(gA, gB);            // брат/сестра
+    if (removal === 1) return uncleLabel(gX, gY, swapped);     // дядя/тётя — племянник/ца
+    if (removal === 2) return grandUncleLabel(gX, gY, swapped, '');    // двоюродная бабушка — внучатый племянник
+    if (removal === 3) return greatGrandUncleLabel(gX, gY, swapped, ''); // прабабушка — правнучатый племянник
+    return farUncleLabel(removal, gX, gY, swapped, '');
+  }
+
+  /* Кузены (degree >= 1) */
+  if (removal === 0) return cousinSiblingLabel(degree, gA, gB, pref);
+  if (removal === 1) return cousinUncleLabel(degree, gX, gY, swapped, pref);
+  if (removal === 2) return cousinGrandUncleLabel(degree, gX, gY, swapped, pref);
+  if (removal === 3) return cousinGreatGrandUncleLabel(degree, gX, gY, swapped, pref);
+  return cousinFarLabel(degree, removal, gX, gY, swapped, pref);
+}
+
+/* ── Вспомогательные функции родственных терминов ── */
+
+function siblingLabel(gA, gB) {
+  if (gA === 'm' && gB === 'm') return 'братья';
+  if (gA === 'f' && gB === 'f') return 'сёстры';
+  const first = gA === 'm' ? 'брат' : 'сестра';
+  const second = gA === 'm' ? 'сестра' : 'брат';
+  return `${first} и ${second}`;
+}
+
+// dX=1, removal=1: дядя/тётя — племянник/племянница
+function uncleLabel(gX, gY, swapped) {
+  const u = gX === 'f' ? 'тётя'       : 'дядя';
+  const n = gY === 'f' ? 'племянница' : 'племянник';
+  return swapped ? `${n} и ${u}` : `${u} и ${n}`;
+}
+
+// dX=1, removal=2: двоюродная бабушка/дедушка — внучатая племянница/племянник
+// «двоюродная бабушка — сестра бабушки или деда»
+// «внучатый племянник — внук брата или сестры»
+function grandUncleLabel(gX, gY, swapped, pfx) {
+  const u = gX === 'f' ? `${pfx}двоюродная бабушка`    : `${pfx}двоюродный дедушка`;
+  const n = gY === 'f' ? `внучатая племянница`          : `внучатый племянник`;
+  return swapped ? `${n} и ${u}` : `${u} и ${n}`;
+}
+
+// dX=1, removal=3: двоюродная прабабушка — правнучатый племянник
+// «правнучатый племянник — правнук брата или сестры»
+function greatGrandUncleLabel(gX, gY, swapped, pfx) {
+  const u = gX === 'f' ? `${pfx}двоюродная прабабушка`  : `${pfx}двоюродный прадедушка`;
+  const n = gY === 'f' ? `правнучатая племянница`        : `правнучатый племянник`;
+  return swapped ? `${n} и ${u}` : `${u} и ${n}`;
+}
+
+// dX=1, removal>=4: обобщение
+function farUncleLabel(removal, gX, gY, swapped, pfx) {
+  const pra = 'пра'.repeat(removal - 2);
+  const u = gX === 'f' ? `${pfx}двоюродная ${pra}прабабушка` : `${pfx}двоюродный ${pra}прадедушка`;
+  const n = gY === 'f' ? `${pra}правнучатая племянница`       : `${pra}правнучатый племянник`;
+  return swapped ? `${n} и ${u}` : `${u} и ${n}`;
+}
+
+// degree≥1, removal=0: двоюродные/троюродные братья и сёстры
+function cousinSiblingLabel(degree, gA, gB, pref) {
+  if (gA === 'm' && gB === 'm') return `${pref}юродные братья`;
+  if (gA === 'f' && gB === 'f') return `${pref}юродные сёстры`;
+  const first = gA === 'm' ? 'брат' : 'сестра';
+  const second = gA === 'm' ? 'сестра' : 'брат';
+  return `${pref}юродные ${first} и ${second}`;
+}
+
+// degree≥1, removal=1: двоюродная тётя/дядя — двоюродный племянник
+// «двоюродная тётка — двоюродная сестра отца или матери»
+// «двоюродный племянник — сын двоюродного брата или сестры»
+function cousinUncleLabel(degree, gX, gY, swapped, pref) {
+  const u = gX === 'f' ? `${pref}юродная тётя`      : `${pref}юродный дядя`;
+  const n = gY === 'f' ? `${pref}юродная племянница` : `${pref}юродный племянник`;
+  return swapped ? `${n} и ${u}` : `${u} и ${n}`;
+}
+
+// degree≥1, removal=2: двоюродная бабушка — двоюродный внучатый племянник
+// «двоюродная бабушка — сестра бабушки или деда»
+// «внучатый двоюродный племянник — внук двоюродного брата или сестры»
+function cousinGrandUncleLabel(degree, gX, gY, swapped, pref) {
+  const u = gX === 'f' ? `${pref}юродная бабушка`           : `${pref}юродный дедушка`;
+  const n = gY === 'f' ? `внучатая ${pref}юродная племянница` : `внучатый ${pref}юродный племянник`;
+  return swapped ? `${n} и ${u}` : `${u} и ${n}`;
+}
+
+// degree≥1, removal=3: двоюродная прабабушка — двоюродный правнучатый племянник
+// «правнучатый двоюродный племянник — правнук двоюродного брата или сестры»
+function cousinGreatGrandUncleLabel(degree, gX, gY, swapped, pref) {
+  const u = gX === 'f' ? `${pref}юродная прабабушка`           : `${pref}юродный прадедушка`;
+  const n = gY === 'f' ? `правнучатая ${pref}юродная племянница` : `правнучатый ${pref}юродный племянник`;
+  return swapped ? `${n} и ${u}` : `${u} и ${n}`;
+}
+
+// degree≥1, removal≥4: обобщение
+function cousinFarLabel(degree, removal, gX, gY, swapped, pref) {
+  const pra = 'пра'.repeat(removal - 2);
+  const u = gX === 'f' ? `${pref}юродная ${pra}прабабушка`           : `${pref}юродный ${pra}прадедушка`;
+  const n = gY === 'f' ? `${pra}правнучатая ${pref}юродная племянница` : `${pra}правнучатый ${pref}юродный племянник`;
+  return swapped ? `${n} и ${u}` : `${u} и ${n}`;
+}
+
+/** Текст цепочки пути. */
+function buildPathText(path) {
+  return pathSteps(path).map(s => {
+    const fn = id => byId[id].name.split(' ').slice(0,2).join(' ');
+    return s.dir === 'up'
+      ? `<span>${fn(s.from)}</span> → (родитель) → <span>${fn(s.to)}</span>`
+      : `<span>${fn(s.from)}</span> → (ребёнок) → <span>${fn(s.to)}</span>`;
+  }).join('<br>');
+}
+
+/* =====================================================================
+   UI АВТОДОПОЛНЕНИЯ
+   ===================================================================== */
+let selectedA = null, selectedB = null;
+
+function setupAutocomplete(inputEl, listEl, onSelect) {
+  let hi = -1;
+  const filter = q => PEOPLE.filter(p => p.name.toLowerCase().includes(q.toLowerCase())).slice(0, 12);
+
+  const render = matches => {
+    listEl.innerHTML = ''; hi = -1;
+    if (!matches.length) { listEl.classList.remove('open'); return; }
+    matches.forEach(p => {
+      const item = document.createElement('div');
+      item.className = 'autocomplete-item';
+      item.setAttribute('role', 'option');
+      item.dataset.id = p.id;
+      item.innerHTML = `${p.name}<span class="years-hint">${p.years}</span>`;
+      item.addEventListener('mousedown', e => { e.preventDefault(); choose(p); });
+      listEl.appendChild(item);
+    });
+    listEl.classList.add('open');
+  };
+
+  const choose = p => {
+    inputEl.value = p.name;
+    listEl.classList.remove('open'); hi = -1;
+    onSelect(p.id);
+  };
+
+  inputEl.addEventListener('input', () => {
+    onSelect(null);
+    const q = inputEl.value.trim();
+    if (q.length < 1) { listEl.classList.remove('open'); return; }
+    render(filter(q));
+  });
+
+  inputEl.addEventListener('keydown', e => {
+    const items = [...listEl.querySelectorAll('.autocomplete-item')];
+    if (!items.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      items[hi]?.classList.remove('highlighted');
+      hi = Math.min(hi + 1, items.length - 1);
+      items[hi]?.classList.add('highlighted');
+      items[hi]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      items[hi]?.classList.remove('highlighted');
+      hi = Math.max(hi - 1, 0);
+      items[hi]?.classList.add('highlighted');
+      items[hi]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter' && hi >= 0) {
+      choose(byId[items[hi].dataset.id]);
+    } else if (e.key === 'Escape') {
+      listEl.classList.remove('open');
+    }
+  });
+
+  inputEl.addEventListener('blur', () => setTimeout(() => listEl.classList.remove('open'), 150));
+}
+
+setupAutocomplete(
+  document.getElementById('rel-input-a'),
+  document.getElementById('ac-list-a'),
+  id => { selectedA = id; }
+);
+setupAutocomplete(
+  document.getElementById('rel-input-b'),
+  document.getElementById('ac-list-b'),
+  id => { selectedB = id; }
+);
+
+document.getElementById('find-relation-btn').addEventListener('click', () => {
+  const resultEl = document.getElementById('relation-result');
+  const textEl   = document.getElementById('result-text');
+  const pathEl   = document.getElementById('result-path');
+
+  document.querySelectorAll('.card.relation-a, .card.relation-b')
+          .forEach(el => el.classList.remove('relation-a', 'relation-b'));
+
+  const showError = msg => {
+    textEl.innerHTML = msg; pathEl.innerHTML = '';
+    resultEl.classList.remove('show', 'error');
+    void resultEl.offsetWidth;
+    resultEl.classList.add('show', 'error');
+  };
+
+  if (!selectedA || !selectedB) return showError('Выберите двух людей из списка.');
+  if (selectedA === selectedB) return showError('Это один и тот же человек.');
+
+  const { label, pathExplanation } = describeRelation(selectedA, selectedB);
+  const nameA = byId[selectedA].name.split(' ').slice(0,2).join(' ');
+  const nameB = byId[selectedB].name.split(' ').slice(0,2).join(' ');
+
+  textEl.innerHTML = `<em>${nameA}</em> и <em>${nameB}</em> — <strong>${label}</strong>`;
+  pathEl.innerHTML = pathExplanation ? `Цепочка связи:<br>${pathExplanation}` : '';
+
+  resultEl.classList.remove('show', 'error');
+  void resultEl.offsetWidth;
+  resultEl.classList.add('show');
+
+  const cardA = document.querySelector(`.card[data-id="${selectedA}"]`);
+  const cardB = document.querySelector(`.card[data-id="${selectedB}"]`);
+  if (cardA) cardA.classList.add('relation-a');
+  if (cardB) cardB.classList.add('relation-b');
+  cardA?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+});
+
+/* =====================================================================
+   ДЕРЕВО
+   ===================================================================== */
+const genNumbers = [...new Set(PEOPLE.map(p => p.gen))].sort((a,b) => a - b);
+
+function computeGenYears(gen) {
+  const pp = PEOPLE.filter(p => p.gen === gen);
+  let minY = null, maxY = null, hasAlive = false;
+  pp.forEach(p => {
+    const raw = (p.years || '').trim();
+    if (/[-–—]\s*$/.test(raw)) hasAlive = true;
+    (raw.match(/\d{4}/g) || []).forEach(y => {
+      const n = +y;
+      if (minY === null || n < minY) minY = n;
+      if (maxY === null || n > maxY) maxY = n;
+    });
+  });
+  if (minY === null) return 'даты неизвестны';
+  return hasAlive ? `${minY}–` : `${minY}–${maxY}`;
+}
+
+document.getElementById('stat-people').textContent = PEOPLE.length;
+document.getElementById('stat-gens').textContent = genNumbers.length;
+
+const treeInner = document.getElementById('tree-inner');
+const svg = document.getElementById('svg-lines');
+const initials = name => name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
+
+genNumbers.forEach(gen => {
+  const row = document.createElement('div');
+  row.className = 'gen-row'; row.dataset.gen = gen;
+
+  const lbl = document.createElement('div');
+  lbl.className = 'gen-label';
+  lbl.innerHTML = `<span class="n">Поколение ${gen}</span><span class="years">${computeGenYears(gen)}</span>`;
+  row.appendChild(lbl);
+
+  const track = document.createElement('div');
+  track.className = 'gen-track';
+
+  PEOPLE.filter(p => p.gen === gen).forEach((p, i) => {
+    const card = document.createElement('button');
+    card.type = 'button'; card.className = 'card'; card.dataset.id = p.id;
+    card.style.setProperty('--tilt', (i % 2 === 0 ? -1 : 1) * (1 + (i % 3)) + 'deg');
+    card.innerHTML = `
+      <div class="photo">${p.photo
+        ? `<img src="${p.photo}" alt="${p.name}">`
+        : `<span class="initials">${initials(p.name)}</span>`}</div>
+      <div class="name">${p.name}</div>
+      <div class="yrs">${p.years}</div>`;
+    card.addEventListener('click', () => selectPerson(p.id));
+    track.appendChild(card);
+  });
+
+  row.appendChild(track);
+  treeInner.appendChild(row);
+});
+
+const cardEl = id => treeInner.querySelector(`.card[data-id="${id}"]`);
+
+function drawLines() {
+  const ir = treeInner.getBoundingClientRect();
+  svg.setAttribute('width', treeInner.scrollWidth);
+  svg.setAttribute('height', treeInner.scrollHeight);
+  svg.innerHTML = '';
+  PEOPLE.forEach(p => {
+    (p.parents || []).forEach(pid => {
+      const pe = cardEl(pid), ce = cardEl(p.id);
+      if (!pe || !ce) return;
+      const pr = pe.querySelector('.photo').getBoundingClientRect();
+      const cr = ce.querySelector('.photo').getBoundingClientRect();
+      const sx = pr.left - ir.left + pr.width/2, sy = pr.bottom - ir.top;
+      const dx = cr.left - ir.left + cr.width/2, dy = cr.top   - ir.top;
+      const my = (sy + dy) / 2;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M ${sx} ${sy} C ${sx} ${my}, ${dx} ${my}, ${dx} ${dy}`);
+      path.dataset.parent = pid; path.dataset.child = p.id;
+      svg.appendChild(path);
+    });
+  });
+}
+
+let rt;
+window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawLines, 120); });
+window.addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(drawLines)));
+document.fonts?.ready.then(() => requestAnimationFrame(drawLines));
+requestAnimationFrame(() => requestAnimationFrame(drawLines));
+
+function connectedIds(id) {
+  const vis = new Set([id]), stack = [id];
+  while (stack.length) {
+    const cur = stack.pop();
+    [...(byId[cur].parents || []), ...(childrenOf[cur] || [])].forEach(nb => {
+      if (!vis.has(nb)) { vis.add(nb); stack.push(nb); }
+    });
+  }
+  return vis;
+}
+
+function selectPerson(id) {
+  const active = connectedIds(id);
+  document.querySelectorAll('.card').forEach(el => {
+    el.classList.toggle('dim',    !active.has(el.dataset.id));
+    el.classList.toggle('active', el.dataset.id === id);
+  });
+  svg.querySelectorAll('path').forEach(p => {
+    const on = active.has(p.dataset.parent) && active.has(p.dataset.child);
+    p.classList.toggle('dim',    !on);
+    p.classList.toggle('active', on);
+  });
+  document.getElementById('reset-btn').classList.add('visible');
+  openPanel(id);
+}
+
+function clearSelection() {
+  document.querySelectorAll('.card').forEach(el =>
+    el.classList.remove('dim','active','relation-a','relation-b'));
+  svg.querySelectorAll('path').forEach(p => p.classList.remove('dim','active'));
+  document.getElementById('reset-btn').classList.remove('visible');
+  document.getElementById('search').value = '';
+  document.getElementById('no-results').classList.remove('show');
+  closePanel();
+}
+
+document.getElementById('reset-btn').addEventListener('click', clearSelection);
+
+const overlay  = document.getElementById('overlay');
+const panel    = document.getElementById('panel');
+const panelBody = document.getElementById('panel-body');
+
+function relList(ids, empty) {
+  if (!ids?.length) return `<p style="color:var(--ink-faint);font-size:13px;">${empty}</p>`;
+  return ids.map(id => `<button class="chip" data-jump="${id}">${byId[id].name}</button>`).join('');
+}
+
+function openPanel(id) {
+  const p = byId[id];
+  panelBody.innerHTML = `
+    <div class="photo-lg">${p.photo
+      ? `<img src="${p.photo}" alt="${p.name}">`
+      : `<span class="initials">${initials(p.name)}</span>`}</div>
+    <h2>${p.name}</h2>
+    <div class="meta">${p.years}${p.place ? ` &middot; <span class="place">${p.place}</span>` : ''}</div>
+    ${p.bio ? `<p class="bio">${p.bio}</p>` : ''}
+    <div class="rel-block"><div class="rel-title">Родители</div>${relList(p.parents, 'Неизвестны')}</div>
+    <div class="rel-block"><div class="rel-title">Дети</div>${relList(childrenOf[id], 'Нет данных')}</div>`;
+  panelBody.querySelectorAll('[data-jump]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      selectPerson(chip.dataset.jump);
+      cardEl(chip.dataset.jump)?.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+    });
+  });
+  overlay.classList.add('open');
+  panel.classList.add('open');
+  panel.setAttribute('aria-hidden', 'false');
+}
+
+function closePanel() {
+  overlay.classList.remove('open');
+  panel.classList.remove('open');
+  panel.setAttribute('aria-hidden', 'true');
+}
+
+overlay.addEventListener('click', clearSelection);
+document.getElementById('panel-close').addEventListener('click', clearSelection);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') clearSelection(); });
+
+document.getElementById('search').addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  const resetBtn  = document.getElementById('reset-btn');
+  const noResults = document.getElementById('no-results');
+  if (!q) {
+    document.querySelectorAll('.card').forEach(el => el.classList.remove('dim'));
+    svg.querySelectorAll('path').forEach(p => p.classList.remove('dim'));
+    resetBtn.classList.remove('visible');
+    noResults.classList.remove('show');
+    return;
+  }
+  const matches = PEOPLE.filter(p => p.name.toLowerCase().includes(q)).map(p => p.id);
+  document.querySelectorAll('.card').forEach(el =>
+    el.classList.toggle('dim', !matches.includes(el.dataset.id)));
+  svg.querySelectorAll('path').forEach(p => p.classList.add('dim'));
+  resetBtn.classList.add('visible');
+  noResults.classList.toggle('show', !matches.length);
+});
+</script>
+</body>
+</html>
