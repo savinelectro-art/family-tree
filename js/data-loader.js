@@ -5,7 +5,7 @@
  */
 
 (function(){
-  const DATA_URL = '/data/people.json';
+  const DATA_URL = 'family-tree/data/people.json';
   const EDITS_KEY = 'SavinTree_edits';
 
   window.SavinTreeData = (function(){
