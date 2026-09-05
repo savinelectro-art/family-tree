@@ -820,7 +820,7 @@ function directLineLabel(dist, gAnc, gDesc, swap = false) {
     if (d === 3) return g === 'f' ? 'прабабушка'      : 'прадедушка';
     if (d === 4) return g === 'f' ? 'прапрабабушка'   : 'прапрадедушка';
     const pra = 'пра'.repeat(d - 2);
-    return g === 'f' ? `${pra}прабабушка` : `${pra}прадедушка`;
+    return g === 'f' ? `${pra}бабушка` : `${pra}дедушка`;
   }
   function descTerm(g, d) {
     if (d === 1) return g === 'f' ? 'дочь'            : 'сын';
@@ -828,7 +828,7 @@ function directLineLabel(dist, gAnc, gDesc, swap = false) {
     if (d === 3) return g === 'f' ? 'правнучка'       : 'правнук';
     if (d === 4) return g === 'f' ? 'праправнучка'    : 'праправнук';
     const pra = 'пра'.repeat(d - 2);
-    return g === 'f' ? `${pra}праправнучка` : `${pra}праправнук`;
+    return g === 'f' ? `${pra}внучка` : `${pra}внук`;
   }
   const at = ancTerm(gAnc, dist);
   const dt = descTerm(gDesc, dist);
