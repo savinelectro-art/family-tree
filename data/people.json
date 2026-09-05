@@ -26,7 +26,7 @@
   { "id":"p24", "name":"Особливец Андрей Михайлович",               "years":"1961–",       "place":"Чехия",            "gen":5, "parents":["p18","p32"], "photo":null,                        "bio":"" },
   { "id":"p25", "name":"Особливец Михаил Михайлович",               "years":"1956-2022",   "place":"Казахстан",        "gen":5, "parents":["p18","p32"], "photo":null,                        "bio":"" },
   { "id":"p26", "name":"Особливец (Груздова) Лилия",                "years":"1961-",       "place":"г. Москва",        "gen":5, "parents":[], "photo":null,                        "bio":"" },
-  { "id":"p27", "name":"Афонина (Гузь) Оксана Викторовна",         "years":"1966-",       "place":"г. Пушкин",        "gen":5, "parents":["p19","p20"], "photo":"photos/afononaoksana.jpg",                        "bio":"" },
+  { "id":"p27", "name":"Афонина (Гузь) Оксана Викторовна",         "years":"1966-",       "place":"г. Пушкин",        "gen":5, "parents":["p19","p20"], "photo":"photos/afoninaoksana.jpg",                        "bio":"" },
   { "id":"p28", "name":"Афонин Юрий Викторович",                    "years":"1965-2023",   "place":"г. Пушкин",        "gen":5, "parents":[], "photo":null,                        "bio":"" },
   { "id":"p29", "name":"Остапенко (Гузь) Татьяна Викторовна",      "years":"1973-",       "place":"г. Пушкин",        "gen":5, "parents":["p19","p20"], "photo":null,                        "bio":"" },
   { "id":"p30", "name":"Побережная (Афонина) Анастасия Юрьевна",   "years":"1989–",       "place":"г. Пушкин",        "gen":6, "parents":["p27","p28"], "photo":"photos/pobereghnayanastya.jpg",                        "bio":"" },
@@ -47,6 +47,6 @@
   { "id":"p46", "name":"Дмитриева (Савина) Ярослава Денисовна",    "years":"2001-",       "place":"г. Иваново",       "gen":7, "parents":["p41","p42"], "photo":"photos/savinayasya.jpg",                        "bio":"" },
   { "id":"p47", "name":"Савина Алиса Денисовна",                    "years":"2013-",       "place":"г. Москва",        "gen":7, "parents":["p41","p43"], "photo":"photos/savinaalisa.jpg",                        "bio":"" },
   { "id":"p48", "name":"Савина Таисия Денисовна",                   "years":"2017-",       "place":"г. Москва",        "gen":7, "parents":["p41","p43"], "photo":"photos/savinatasya.jpg",                        "bio":"" },
-  { "id":"p49", "name":"Хомская Николь Марковна",                   "years":"2006-",       "place":"г. Иваново",       "gen":7, "parents":["p44","p45"], "photo":"photos/savinanikol.jpg",                        "bio":"" },
+  { "id":"p49", "name":"Хомская Николь Марковна",                   "years":"2006-",       "place":"г. Иваново",       "gen":7, "parents":["p44","p45"], "photo":"photos/homskayanikol.jpg",                        "bio":"" },
   { "id":"p50", "name":"Хомская Василиса Марковна",                 "years":"2014-",       "place":"г. Иваново",       "gen":7, "parents":["p44","p45"], "photo":null,                        "bio":"" }
 ]
