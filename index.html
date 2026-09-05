@@ -537,7 +537,7 @@
 <body>
 
 <header class="hero">
-  <p class="eyebrow">Семейный архив &middot; 6 поколений</p>
+  <p class="eyebrow">Семейный архив &middot; <span id="header-gens">—</span> поколений</p>
   <h1>Родословная <em>рода Савиных</em></h1>
   <p class="hero-sub">
     От села Вознесеновка (Благовещенск), 1872 год, до наших дней. Нажмите на карточку, чтобы
@@ -545,7 +545,7 @@
   </p>
   <div class="hero-stats">
     <div class="stat"><span class="num" id="stat-people">—</span><span class="label">человек в дереве</span></div>
-    <div class="stat"><span class="num" id="stat-gens">6</span><span class="label">поколений</span></div>
+    <div class="stat"><span class="num" id="stat-gens">—</span><span class="label">поколений</span></div>
     <div class="stat"><span class="num">1872</span><span class="label">самая ранняя фотография</span></div>
   </div>
   <div class="search-row">
@@ -657,6 +657,10 @@ async function initTree(){
     
     // Обновляем статистику
     document.getElementById('stat-people').textContent = PEOPLE.length;
+    const maxGen = Math.max(...PEOPLE.map(p => parseInt(p.gen) || 0));
+    document.getElementById('stat-gens').textContent = maxGen;
+    document.getElementById('header-gens').textContent = maxGen;
+    console.log('Generations: 1 to', maxGen);
     
     // Перерисовываем дерево
     renderTree();
