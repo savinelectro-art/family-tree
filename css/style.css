@@ -113,6 +113,40 @@ h1 em { font-style: italic; font-weight: 500; color: var(--brass-bright); }
 #reset-btn:hover, #export-json:hover { background: rgba(184,146,90,0.12); }
 #reset-btn:focus-visible, #export-json:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
+.ghost-btn {
+  background: transparent;
+  border: 1px solid rgba(184,146,90,0.35);
+  color: var(--brass);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+.ghost-btn:hover { background: rgba(184,146,90,0.12); }
+.ghost-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.ghost-btn:disabled { opacity: 0.5; cursor: default; }
+
+.gh-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin: 10px 0 0;
+  min-height: 1.4em;
+}
+.gh-status.ok { color: #8ec98e; }
+.gh-status.err { color: var(--rust); }
+
+.gh-hint {
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
 /* ── Relation Finder ── */
 .relation-section {
   max-width: 1100px;

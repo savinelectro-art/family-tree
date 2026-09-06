@@ -11,6 +11,7 @@
 
 <script src="js/data-loader.js"></script>
 <script src="js/data-editor.js"></script>
+<script src="js/github-sync.js"></script>
 </head>
 <body>
 
@@ -30,7 +31,10 @@
     <input id="search" type="text" placeholder="Найти человека по имени…" autocomplete="off">
     <button id="reset-btn" type="button">Сбросить</button>
     <button id="export-json" type="button">📥 Экспорт</button>
+    <button id="github-push-btn" type="button" class="ghost-btn">🔗 На GitHub</button>
+    <button id="github-settings-btn" type="button" class="ghost-btn" title="Настройки GitHub" aria-label="Настройки GitHub">⚙</button>
   </div>
+  <p id="gh-status" class="gh-status" role="status" aria-live="polite"></p>
 </header>
 
 <section class="relation-section" aria-label="Найти родственную связь">
@@ -101,6 +105,43 @@
     <div class="editor-buttons">
       <button id="save-edit" type="button" class="btn-primary">Сохранить</button>
       <button id="cancel-edit" type="button" class="btn-secondary">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<!-- Панель настроек GitHub -->
+<div id="github-panel" class="editor-panel" style="display:none;" aria-hidden="true">
+  <div class="editor-content">
+    <h3>Настройки GitHub</h3>
+    <div class="editor-field">
+      <label for="gh-owner">Владелец репозитория (пользователь/организация)</label>
+      <input id="gh-owner" type="text" placeholder="savinelectro-art"/>
+    </div>
+    <div class="editor-field">
+      <label for="gh-repo">Название репозитория</label>
+      <input id="gh-repo" type="text" placeholder="family-tree"/>
+    </div>
+    <div class="editor-field">
+      <label for="gh-branch">Ветка</label>
+      <input id="gh-branch" type="text" placeholder="main"/>
+    </div>
+    <div class="editor-field">
+      <label for="gh-path">Путь к файлу данных</label>
+      <input id="gh-path" type="text" placeholder="data/people.json"/>
+    </div>
+    <div class="editor-field">
+      <label for="gh-token">Personal Access Token</label>
+      <input id="gh-token" type="password" placeholder="github_pat_…" autocomplete="off"/>
+    </div>
+    <p class="gh-hint">
+      Нужен fine-grained токен, выданный только на этот репозиторий,
+      с правом <strong>Contents: Read and write</strong>. Токен хранится
+      исключительно в localStorage этого браузера и отправляется только на api.github.com.
+    </p>
+    <div class="editor-buttons">
+      <button id="gh-save-settings" type="button" class="btn-primary">Сохранить</button>
+      <button id="gh-forget-token" type="button" class="btn-secondary">Забыть токен</button>
+      <button id="gh-cancel-settings" type="button" class="btn-secondary">Отмена</button>
     </div>
   </div>
 </div>
