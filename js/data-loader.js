@@ -5,7 +5,12 @@
  */
 
 (function(){
-  const DATA_URL = '/family-tree/data/people.json';
+  // ИСПРАВЛЕНО: раньше был абсолютный путь '/family-tree/data/people.json',
+  // который работает только если сайт размещён ровно в подпапке /family-tree/.
+  // Относительный путь работает независимо от того, где развёрнут сайт
+  // (корень домена, GitHub Pages в подпапке репозитория и т.д.),
+  // пока index.html и data/ лежат рядом.
+  const DATA_URL = 'data/people.json';
   const EDITS_KEY = 'SavinTree_edits';
 
   window.SavinTreeData = (function(){

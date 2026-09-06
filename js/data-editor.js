@@ -21,9 +21,16 @@
     document.getElementById('edit-bio').value = person.bio || '';
     document.getElementById('edit-photo').value = person.photo || '';
 
-    // Показываем редактор
+    // Показываем редактор.
+    // ИСПРАВЛЕНО: раньше стояло display = 'block', но в CSS .editor-panel
+    // задан как flex-контейнер (display:flex; align-items:center; justify-content:center)
+    // для центрирования модального окна. 'block' ломал центрирование —
+    // окно уезжало в левый верхний угол экрана.
     const editor = document.getElementById('editor-panel');
-    if (editor) editor.style.display = 'block';
+    if (editor) {
+      editor.style.display = 'flex';
+      editor.setAttribute('aria-hidden', 'false');
+    }
   }
 
   /**
@@ -31,7 +38,10 @@
    */
   function closeEditor(){
     const editor = document.getElementById('editor-panel');
-    if (editor) editor.style.display = 'none';
+    if (editor) {
+      editor.style.display = 'none';
+      editor.setAttribute('aria-hidden', 'true');
+    }
     currentEditId = null;
   }
 
@@ -75,6 +85,14 @@
   }
 
   /**
+   * Проверяет, открыт ли редактор в данный момент
+   */
+  function isOpen(){
+    const editor = document.getElementById('editor-panel');
+    return !!editor && editor.style.display === 'flex';
+  }
+
+  /**
    * Инициализирует обработчики редактирования
    */
   function init(){
@@ -90,12 +108,27 @@
     const exportBtn = document.getElementById('export-json');
     if (exportBtn) exportBtn.addEventListener('click', exportToJSON);
 
+    // ИСПРАВЛЕНО: раньше Escape закрывал только карточку/боковую панель,
+    // но не панель редактирования — теперь закрывает и её тоже.
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isOpen()) closeEditor();
+    });
+
+    // Клик по тёмному фону тоже закрывает редактор (клик по самой карточке не всплывёт до фона)
+    const editorPanel = document.getElementById('editor-panel');
+    if (editorPanel) {
+      editorPanel.addEventListener('click', e => {
+        if (e.target === editorPanel) closeEditor();
+      });
+    }
+
     // Экспортируем функции в глобальный scope для использования из index.html
     window.SavinTreeEditor = {
       openEditor,
       closeEditor,
       saveEdit,
-      exportToJSON
+      exportToJSON,
+      isOpen
     };
   }
 

@@ -7,529 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap&subset=cyrillic" rel="stylesheet">
-
-<style>
-  :root {
-    --bg: #14181c;
-    --bg-deep: #0e1114;
-    --paper: #ece1c8;
-    --paper-shadow: #b8a476;
-    --ink: #ece7dd;
-    --ink-soft: #9b988e;
-    --ink-faint: #6a6860;
-    --brass: #b8925a;
-    --brass-bright: #d9ac6f;
-    --rust: #9a5138;
-    --line: #b8925a;
-    --focus: #d9ac6f;
-  } 
-
-  * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0; padding: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'PT Serif', Georgia, serif;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body {
-    background-image:
-      radial-gradient(ellipse at top left, rgba(184,146,90,0.06), transparent 55%),
-      radial-gradient(ellipse at bottom right, rgba(184,146,90,0.05), transparent 55%);
-    min-height: 100vh;
-  }
-
-  ::selection { background: var(--brass); color: #14181c; }
-  a { color: inherit; }
-
-  /* ── Header ── */
-  header.hero {
-    padding: 56px 32px 40px;
-    max-width: 1100px;
-    margin: 0 auto;
-    border-bottom: 1px solid rgba(184,146,90,0.2);
-  }
-
-  .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--brass);
-    margin: 0 0 14px;
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: clamp(32px, 5vw, 52px);
-    line-height: 1.05;
-    margin: 0 0 16px;
-    color: var(--paper);
-    letter-spacing: -0.01em;
-  }
-  h1 em { font-style: italic; font-weight: 500; color: var(--brass-bright); }
-
-  .hero-sub {
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--ink-soft);
-    max-width: 60ch;
-    margin: 0 0 28px;
-  }
-
-  .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 28px; }
-  .stat { font-family: 'JetBrains Mono', monospace; }
-  .stat .num { display: block; font-size: 26px; color: var(--paper); font-weight: 600; }
-  .stat .label { display: block; font-size: 12px; color: var(--ink-faint); letter-spacing: 0.04em; margin-top: 2px; }
-
-  .search-row { display: flex; gap: 10px; max-width: 420px; align-items: center; }
-
-  #search {
-    flex: 1;
-    background: rgba(236,225,200,0.05);
-    border: 1px solid rgba(184,146,90,0.35);
-    color: var(--ink);
-    font-family: 'PT Serif', serif;
-    font-size: 15px;
-    padding: 11px 14px;
-    border-radius: 3px;
-    outline: none;
-    transition: border-color 0.15s ease, background 0.15s ease;
-  }
-  #search::placeholder { color: var(--ink-faint); }
-  #search:focus { border-color: var(--brass-bright); background: rgba(236,225,200,0.08); }
-  #search:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-
-  #reset-btn, #export-json {
-    background: transparent;
-    border: 1px solid rgba(184,146,90,0.35);
-    color: var(--brass);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.04em;
-    padding: 11px 14px;
-    border-radius: 3px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.15s ease, background 0.15s ease;
-  }
-  #reset-btn {
-    opacity: 0;
-    pointer-events: none;
-  }
-  #reset-btn.visible { opacity: 1; pointer-events: auto; }
-  #reset-btn:hover, #export-json:hover { background: rgba(184,146,90,0.12); }
-  #reset-btn:focus-visible, #export-json:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-
-  /* ── Relation Finder ── */
-  .relation-section {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 36px 32px 0;
-    border-bottom: 1px solid rgba(184,146,90,0.12);
-  }
-  .relation-section .section-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--brass);
-    margin: 0 0 16px;
-  }
-  .relation-inputs {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    margin-bottom: 20px;
-  }
-  .relation-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    min-width: 200px;
-    max-width: 340px;
-    position: relative;
-  }
-  .relation-field label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--ink-faint);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .relation-field input {
-    background: rgba(236,225,200,0.05);
-    border: 1px solid rgba(184,146,90,0.35);
-    color: var(--ink);
-    font-family: 'PT Serif', serif;
-    font-size: 15px;
-    padding: 11px 14px;
-    border-radius: 3px;
-    outline: none;
-    transition: border-color 0.15s ease, background 0.15s ease;
-    width: 100%;
-  }
-  .relation-field input::placeholder { color: var(--ink-faint); }
-  .relation-field input:focus { border-color: var(--brass-bright); background: rgba(236,225,200,0.08); }
-  .relation-field input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-
-  .autocomplete-list {
-    position: absolute;
-    top: 100%; left: 0; right: 0;
-    background: #1a1e24;
-    border: 1px solid rgba(184,146,90,0.4);
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    z-index: 100;
-    max-height: 220px;
-    overflow-y: auto;
-    display: none;
-    scrollbar-color: var(--brass) transparent;
-  }
-  .autocomplete-list.open { display: block; }
-  .autocomplete-list::-webkit-scrollbar { width: 6px; }
-  .autocomplete-list::-webkit-scrollbar-track { background: transparent; }
-  .autocomplete-list::-webkit-scrollbar-thumb { background: rgba(184,146,90,0.4); border-radius: 3px; }
-  .autocomplete-item {
-    padding: 10px 14px;
-    font-size: 14px;
-    color: var(--ink-soft);
-    cursor: pointer;
-    border-bottom: 1px solid rgba(184,146,90,0.1);
-    transition: background 0.1s ease, color 0.1s ease;
-  }
-  .autocomplete-item:last-child { border-bottom: none; }
-  .autocomplete-item:hover, .autocomplete-item.highlighted {
-    background: rgba(184,146,90,0.12); color: var(--ink);
-  }
-  .autocomplete-item .years-hint {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; color: var(--ink-faint); margin-left: 8px;
-  }
-
-  .relation-btn {
-    background: rgba(184,146,90,0.12);
-    border: 1px solid rgba(184,146,90,0.45);
-    color: var(--brass-bright);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px; letter-spacing: 0.06em;
-    padding: 11px 20px; border-radius: 3px;
-    cursor: pointer; white-space: nowrap;
-    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-    align-self: flex-end; height: 44px;
-  }
-  .relation-btn:hover { background: rgba(184,146,90,0.22); border-color: var(--brass-bright); color: var(--paper); }
-  .relation-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-
-  .relation-result {
-    padding: 18px 20px; margin-bottom: 28px;
-    border-radius: 4px; border-left: 3px solid var(--brass);
-    background: rgba(184,146,90,0.06);
-    display: none; animation: fadeIn 0.2s ease;
-  }
-  .relation-result.show { display: block; }
-  .relation-result.error { border-left-color: var(--rust); background: rgba(154,81,56,0.08); }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .relation-result .result-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; color: var(--ink-faint);
-    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
-  }
-  .relation-result .result-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px; color: var(--paper); line-height: 1.3; margin-bottom: 6px;
-  }
-  .relation-result .result-text em { font-style: italic; color: var(--brass-bright); }
-  .relation-result .result-path {
-    font-size: 13px; color: var(--ink-faint); line-height: 1.6;
-    margin-top: 12px; font-family: 'PT Serif', serif; font-style: italic;
-  }
-  .relation-result .result-path span { color: var(--ink-soft); }
-
-  /* ── Tree ── */
-  .tree-wrap { max-width: 1100px; margin: 0 auto; padding: 36px 0 80px; }
-  .tree-scroll {
-    overflow-x: auto; overflow-y: hidden;
-    padding: 4px 32px 28px; scrollbar-color: var(--brass) transparent;
-  }
-  .tree-scroll::-webkit-scrollbar { height: 8px; }
-  .tree-scroll::-webkit-scrollbar-track { background: transparent; }
-  .tree-scroll::-webkit-scrollbar-thumb { background: rgba(184,146,90,0.4); border-radius: 4px; }
-  .tree-inner {
-    position: relative; width: max-content;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  svg.connections {
-    position: absolute; top: 0; left: 0;
-    pointer-events: none; overflow: visible;
-  }
-  svg.connections path {
-    fill: none; stroke: var(--line); stroke-width: 1.4;
-    opacity: 0.38; stroke-linecap: round;
-    transition: opacity 0.25s ease, stroke-width 0.25s ease;
-  }
-  svg.connections path.active { opacity: 0.95; stroke: var(--brass-bright); stroke-width: 2; }
-  svg.connections path.dim { opacity: 0.08; }
-
-  .gen-row { display: flex; align-items: stretch; min-height: 150px; }
-  .gen-label {
-    position: sticky; left: 0; z-index: 3;
-    display: flex; flex-direction: column; justify-content: center;
-    width: 128px; flex: 0 0 128px;
-    padding: 10px 18px 10px 0;
-    background: linear-gradient(90deg, var(--bg) 72%, transparent);
-  }
-  .gen-label .n {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    color: var(--rust); background: rgba(154,81,56,0.15);
-    border: 1px solid rgba(154,81,56,0.4);
-    display: inline-block; padding: 2px 7px; border-radius: 2px;
-    width: fit-content; letter-spacing: 0.06em; margin-bottom: 6px;
-  }
-  .gen-label .years {
-    font-family: 'Playfair Display', serif; font-style: italic;
-    font-size: 15px; color: var(--ink-soft); line-height: 1.3;
-  }
-  .gen-track { display: flex; gap: 22px; padding: 14px 24px 14px 0; align-items: flex-start; }
-
-  /* ── Cards ── */
-  .card {
-    flex: 0 0 auto; width: 122px;
-    background: none; border: none; padding: 0;
-    cursor: pointer; font-family: inherit; text-align: left;
-    transition: opacity 0.25s ease, transform 0.15s ease;
-  }
-  .card:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
-  .card.dim { opacity: 0.22; }
-  .card .photo {
-    position: relative; width: 100%; aspect-ratio: 4/5;
-    background: linear-gradient(155deg, var(--paper), #d8c89b);
-    border: 6px solid var(--paper);
-    box-shadow: 0 3px 0 var(--paper-shadow), 0 8px 18px rgba(0,0,0,0.45);
-    transform: rotate(var(--tilt, -1.4deg));
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
-  }
-  .card .photo img { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.35) contrast(1.02); }
-  .card .photo .initials {
-    font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700;
-    color: #7a6947; opacity: 0.55;
-  }
-  .card .photo::after {
-    content: ''; position: absolute; top: -8px; left: 50%;
-    width: 34px; height: 14px;
-    transform: translateX(-50%) rotate(-3deg);
-    background: rgba(217,172,111,0.35); border: 1px solid rgba(217,172,111,0.5);
-  }
-  .card:hover .photo, .card.active .photo {
-    transform: rotate(0deg) translateY(-3px);
-    box-shadow: 0 4px 0 var(--brass-bright), 0 12px 22px rgba(0,0,0,0.5);
-  }
-  .card.active .photo { border-color: var(--brass-bright); }
-  .card.relation-a .photo {
-    border-color: oklch(65% 0.14 250);
-    box-shadow: 0 4px 0 oklch(50% 0.14 250), 0 12px 22px rgba(0,0,0,0.5);
-    transform: rotate(0deg) translateY(-3px);
-  }
-  .card.relation-b .photo {
-    border-color: oklch(70% 0.13 145);
-    box-shadow: 0 4px 0 oklch(52% 0.13 145), 0 12px 22px rgba(0,0,0,0.5);
-    transform: rotate(0deg) translateY(-3px);
-  }
-  .card .name { margin-top: 10px; font-size: 13px; line-height: 1.3; color: var(--ink); }
-  .card .yrs { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-faint); margin-top: 2px; }
-
-  .no-results { color: var(--ink-faint); font-style: italic; padding: 40px 32px; display: none; }
-  .no-results.show { display: block; }
-
-  /* ── Detail panel ── */
-  .overlay {
-    position: fixed; inset: 0; background: rgba(10,12,14,0.55);
-    opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 10;
-  }
-  .overlay.open { opacity: 1; pointer-events: auto; }
-  .panel {
-    position: fixed; top: 0; right: 0; height: 100%;
-    width: 380px; max-width: 92vw;
-    background: var(--bg-deep); border-left: 1px solid rgba(184,146,90,0.3);
-    transform: translateX(100%); transition: transform 0.28s cubic-bezier(.4,0,.2,1);
-    z-index: 11; overflow-y: auto; padding: 28px 26px 40px;
-  }
-  .panel.open { transform: translateX(0); }
-  .panel-close {
-    background: none; border: 1px solid rgba(184,146,90,0.35);
-    color: var(--brass); width: 32px; height: 32px; border-radius: 3px;
-    cursor: pointer; font-size: 16px; line-height: 1; margin-bottom: 22px;
-  }
-  .panel-close:hover { background: rgba(184,146,90,0.12); }
-  .panel-close:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-  .panel .photo-lg {
-    width: 148px; aspect-ratio: 4/5;
-    background: linear-gradient(155deg, var(--paper), #d8c89b);
-    border: 8px solid var(--paper);
-    box-shadow: 0 4px 0 var(--paper-shadow), 0 10px 20px rgba(0,0,0,0.45);
-    transform: rotate(-1.4deg);
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 22px; overflow: hidden;
-  }
-  .panel .photo-lg img { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.35) contrast(1.02); }
-  .panel .photo-lg .initials { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: #7a6947; opacity: 0.55; }
-  .panel h2 { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.2; margin: 0 0 6px; color: var(--paper); }
-  .panel .meta { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--brass); margin-bottom: 18px; }
-  .panel .meta .place { color: var(--ink-faint); }
-  .panel p.bio { font-size: 15px; line-height: 1.65; color: var(--ink-soft); margin: 0 0 26px; }
-  .panel .rel-block { margin-bottom: 20px; }
-  .panel .rel-title {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px;
-  }
-  .chip {
-    display: inline-flex; align-items: center;
-    background: rgba(184,146,90,0.1); border: 1px solid rgba(184,146,90,0.3);
-    color: var(--ink); font-size: 13px; padding: 6px 11px; border-radius: 20px;
-    margin: 0 6px 6px 0; cursor: pointer; font-family: 'PT Serif', serif;
-  }
-  .chip:hover { background: rgba(184,146,90,0.2); border-color: var(--brass-bright); }
-  .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-
-  footer {
-    text-align: center; padding: 30px 20px 50px;
-    color: var(--ink-faint); font-size: 12.5px; font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* ── Editor Panel ── */
-  .editor-panel {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .editor-content {
-    background: var(--bg-deep);
-    border: 1px solid var(--brass);
-    border-radius: 6px;
-    padding: 28px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  .editor-content h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: var(--paper);
-    margin: 0 0 20px;
-  }
-
-  .editor-field {
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .editor-field label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--ink-faint);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .editor-field input,
-  .editor-field textarea {
-    background: rgba(236,225,200,0.05);
-    border: 1px solid rgba(184,146,90,0.35);
-    color: var(--ink);
-    font-family: 'PT Serif', serif;
-    font-size: 14px;
-    padding: 10px 12px;
-    border-radius: 3px;
-    outline: none;
-    transition: border-color 0.15s ease;
-  }
-
-  .editor-field input:focus,
-  .editor-field textarea:focus {
-    border-color: var(--brass-bright);
-    background: rgba(236,225,200,0.08);
-  }
-
-  .editor-field textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-
-  .editor-buttons {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    flex: 1;
-    padding: 11px 16px;
-    border-radius: 3px;
-    border: 1px solid;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
-  }
-
-  .btn-primary {
-    background: rgba(184,146,90,0.12);
-    border-color: rgba(184,146,90,0.45);
-    color: var(--brass-bright);
-  }
-
-  .btn-primary:hover {
-    background: rgba(184,146,90,0.22);
-    border-color: var(--brass-bright);
-    color: var(--paper);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    border-color: rgba(184,146,90,0.35);
-    color: var(--brass);
-  }
-
-  .btn-secondary:hover {
-    background: rgba(184,146,90,0.08);
-  }
-
-  @media (max-width: 640px) {
-    header.hero { padding: 40px 20px 28px; }
-    .tree-scroll { padding: 4px 20px 24px; }
-    .gen-label { width: 96px; flex-basis: 96px; }
-    .panel { width: 100%; max-width: 100%; }
-    .relation-section { padding: 28px 20px 0; }
-    .relation-inputs { flex-direction: column; }
-    .relation-field { max-width: 100%; }
-    .relation-btn { width: 100%; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; animation: none !important; }
-  }
-</style>
+<link rel="stylesheet" href="css/style.css">
 
 <script src="js/data-loader.js"></script>
 <script src="js/data-editor.js"></script>
@@ -597,7 +75,7 @@
 </aside>
 
 <!-- Панель редактирования персоны -->
-<div id="editor-panel" class="editor-panel" style="display:none;">
+<div id="editor-panel" class="editor-panel" style="display:none;" aria-hidden="true">
   <div class="editor-content">
     <h3>Редактирование персоны</h3>
     <div class="editor-field">
@@ -635,6 +113,21 @@
 let PEOPLE = [];
 let byId = {};
 let childrenOf = {};
+
+// ИСПРАВЛЕНО (безопасность/устойчивость вёрстки): имя, био, место и годы
+// раньше вставлялись через innerHTML без экранирования. Если в правках
+// (localStorage) окажутся символы вроде "<", "&", вёрстка карточки/панели
+// ломалась, а при вставке <script> это был бы XSS. Все пользовательские
+// строки теперь проходят через escapeHtml() перед вставкой в innerHTML.
+function escapeHtml(str){
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 async function initTree(){
   try {
@@ -684,7 +177,7 @@ function renderTree(){
     const lbl = document.createElement('div');
     lbl.className = 'gen-label';
     const genYears = computeGenYears(gen);
-    lbl.innerHTML = `<span class="n">Поколение ${gen}</span><span class="years">${genYears}</span>`;
+    lbl.innerHTML = `<span class="n">Поколение ${gen}</span><span class="years">${escapeHtml(genYears)}</span>`;
     row.appendChild(lbl);
 
     const track = document.createElement('div');
@@ -700,10 +193,10 @@ function renderTree(){
       const init = p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
       card.innerHTML = `
         <div class="photo">${p.photo
-          ? `<img src="${p.photo}" alt="${p.name}">`
-          : `<span class="initials">${init}</span>`}</div>
-        <div class="name">${p.name}</div>
-        <div class="yrs">${p.years}</div>`;
+          ? `<img src="${escapeHtml(p.photo)}" alt="${escapeHtml(p.name)}">`
+          : `<span class="initials">${escapeHtml(init)}</span>`}</div>
+        <div class="name">${escapeHtml(p.name)}</div>
+        <div class="yrs">${escapeHtml(p.years)}</div>`;
       
       card.addEventListener('click', () => selectPerson(p.id));
       track.appendChild(card);
@@ -931,7 +424,7 @@ function cousinFarLabel(degree, removal, gX, gY, swapped, pref) {
 
 function buildPathText(path) {
   return pathSteps(path).map(s => {
-    const fn = id => byId[id].name.split(' ').slice(0,2).join(' ');
+    const fn = id => escapeHtml(byId[id].name.split(' ').slice(0,2).join(' '));
     return s.dir === 'up'
       ? `<span>${fn(s.from)}</span> → (родитель) → <span>${fn(s.to)}</span>`
       : `<span>${fn(s.from)}</span> → (ребёнок) → <span>${fn(s.to)}</span>`;
@@ -972,7 +465,7 @@ function setupAutocomplete(inputEl, listEl, onSelect) {
       item.className = 'autocomplete-item';
       item.setAttribute('role', 'option');
       item.dataset.id = p.id;
-      item.innerHTML = `${p.name}<span class="years-hint">${p.years}</span>`;
+      item.innerHTML = `${escapeHtml(p.name)}<span class="years-hint">${escapeHtml(p.years)}</span>`;
       item.addEventListener('mousedown', e => { e.preventDefault(); choose(p); });
       listEl.appendChild(item);
     });
@@ -1038,10 +531,10 @@ document.getElementById('find-relation-btn').addEventListener('click', () => {
   if (selectedA === selectedB) return showError('Это один и тот же человек.');
 
   const { label, pathExplanation } = describeRelation(selectedA, selectedB);
-  const nameA = byId[selectedA].name.split(' ').slice(0,2).join(' ');
-  const nameB = byId[selectedB].name.split(' ').slice(0,2).join(' ');
+  const nameA = escapeHtml(byId[selectedA].name.split(' ').slice(0,2).join(' '));
+  const nameB = escapeHtml(byId[selectedB].name.split(' ').slice(0,2).join(' '));
 
-  textEl.innerHTML = `<em>${nameA}</em> и <em>${nameB}</em> — <strong>${label}</strong>`;
+  textEl.innerHTML = `<em>${nameA}</em> и <em>${nameB}</em> — <strong>${escapeHtml(label)}</strong>`;
   pathEl.innerHTML = pathExplanation ? `Цепочка связи:<br>${pathExplanation}` : '';
 
   resultEl.classList.remove('show', 'error');
@@ -1138,19 +631,19 @@ document.getElementById('reset-btn').addEventListener('click', clearSelection);
 
 function relList(ids, empty) {
   if (!ids?.length) return `<p style="color:var(--ink-faint);font-size:13px;">${empty}</p>`;
-  return ids.map(id => `<button class="chip" data-jump="${id}">${byId[id].name}</button>`).join('');
+  return ids.map(id => `<button class="chip" data-jump="${id}">${escapeHtml(byId[id].name)}</button>`).join('');
 }
 
 function openPanel(id) {
   const p = byId[id];
   panelBody.innerHTML = `
     <div class="photo-lg">${p.photo
-      ? `<img src="${p.photo}" alt="${p.name}">`
-      : `<span class="initials">${(p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase())}</span>`}</div>
-    <h2>${p.name}</h2>
-    <div class="meta">${p.years}${p.place ? ` &middot; <span class="place">${p.place}</span>` : ''}</div>
+      ? `<img src="${escapeHtml(p.photo)}" alt="${escapeHtml(p.name)}">`
+      : `<span class="initials">${escapeHtml(p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase())}</span>`}</div>
+    <h2>${escapeHtml(p.name)}</h2>
+    <div class="meta">${escapeHtml(p.years)}${p.place ? ` &middot; <span class="place">${escapeHtml(p.place)}</span>` : ''}</div>
     <button id="edit-btn" type="button" class="chip" style="margin-bottom:16px;">✏️ Редактировать</button>
-    ${p.bio ? `<p class="bio">${p.bio}</p>` : ''}
+    ${p.bio ? `<p class="bio">${escapeHtml(p.bio)}</p>` : ''}
     <div class="rel-block"><div class="rel-title">Родители</div>${relList(p.parents, 'Неизвестны')}</div>
     <div class="rel-block"><div class="rel-title">Дети</div>${relList(childrenOf[id], 'Нет данных')}</div>`;
   
@@ -1184,7 +677,15 @@ function closePanel() {
 
 overlay.addEventListener('click', clearSelection);
 document.getElementById('panel-close').addEventListener('click', clearSelection);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') clearSelection(); });
+document.addEventListener('keydown', e => {
+  // ИСПРАВЛЕНО: Escape закрывал только карточку/боковую панель. Если открыт
+  // редактор — не трогаем боковую панель, чтобы Escape не сбрасывал выбор
+  // дерева, пока пользователь редактирует данные (data-editor.js сам
+  // обрабатывает Escape для своей панели).
+  if (e.key === 'Escape' && !(window.SavinTreeEditor && window.SavinTreeEditor.isOpen())) {
+    clearSelection();
+  }
+});
 
 document.getElementById('search').addEventListener('input', e => {
   const q = e.target.value.trim().toLowerCase();
