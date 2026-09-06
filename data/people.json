@@ -628,5 +628,89 @@
     ],
     "photo": null,
     "bio": ""
+  },
+   {
+    "id": "p53",
+    "name": "Фролов Лев",
+    "years": "-",
+    "place": "г. Пушкин",
+    "gen": 7,
+    "parents": [
+      "p31"
+    ],
+    "photo": null,
+    "bio": ""
+  },
+  {
+    "id": "p54",
+    "name": "Фролова Юлия",
+    "years": "-",
+    "place": "г. Пушкин",
+    "gen": 7,
+    "parents": [
+      "p31"
+    ],
+    "photo": null,
+    "bio": ""
+  },{
+    "id": "p55",
+    "name": "Фролова Ксения",
+    "years": "-",
+    "place": "г. Пушкин",
+    "gen": 7,
+    "parents": [
+      "p31"
+    ],
+    "photo": null,
+    "bio": ""
+  },
+  {
+    "id": "p56",
+    "name": "Фролова Олеся",
+    "years": "-",
+    "place": "г. Пушкин",
+    "gen": 7,
+    "parents": [
+      "p31"
+    ],
+    "photo": null,
+    "bio": ""
+  },
+  {
+    "id": "p57",
+    "name": "Сушкина Елена Владиславовна",
+    "years": "1960-",
+    "place": "г. Южно-Сахалинск",
+    "gen": 5,
+    "parents": [
+      "p35", 
+      "p36"
+    ],
+    "photo": null,
+    "bio": ""
+  }, 
+   {
+    "id": "p58",
+    "name": "Сушкин Иван Иванович",
+    "years": "-",
+    "place": "-",
+    "gen": 5,
+    "parents": [],
+    "photo": null,
+    "bio": ""
+  },
+   {
+    "id": "p59",
+    "name": "Сушкин Михаил Иванович",
+    "years": "1990-",
+    "place": "г. Иваново",
+    "gen": 6,
+    "parents": [
+      "p57", 
+      "p58"
+    ],
+    "photo": null,
+    "bio": ""
   }
+
 ]
