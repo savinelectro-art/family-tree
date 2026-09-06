@@ -277,30 +277,7 @@
     "photo": "photos/nadezhdabudnikova.jpg",
     "bio": ""
   },
-  {
-    "id": "p51",
-    "name": "Осипенко Елена",
-    "years": "19-",
-    "place": "г. Владивосток",
-    "gen": 5,
-    "parents": [
-      "p21"
-    ],
-    "photo": "photos/elenaosipenko.jpg",
-    "bio": ""
-  },
-   {
-    "id": "p52",
-    "name": "Осипенко Олег",
-    "years": "19-",
-    "place": "г. Владивосток",
-    "gen": 5,
-    "parents": [
-      "p21"
-    ],
-    "photo": null,
-    "bio": ""
-  },
+  
   {
     "id": "p23",
     "name": "Особливец Владимир Михайлович",
@@ -382,6 +359,30 @@
     "parents": [
       "p19",
       "p20"
+    ],
+    "photo": null,
+    "bio": ""
+  },
+  {
+    "id": "p51",
+    "name": "Осипенко Елена",
+    "years": "19-",
+    "place": "г. Владивосток",
+    "gen": 5,
+    "parents": [
+      "p21"
+    ],
+    "photo": "photos/elenaosipenko.jpg",
+    "bio": ""
+  },
+   {
+    "id": "p52",
+    "name": "Осипенко Олег",
+    "years": "19-",
+    "place": "г. Владивосток",
+    "gen": 5,
+    "parents": [
+      "p21"
     ],
     "photo": null,
     "bio": ""
