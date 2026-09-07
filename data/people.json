@@ -118,7 +118,31 @@
       "p8"
     ],
     "photo": null,
-    "bio": "Инженер-электрик. Всю жизнь собирал семейный фотоархив."
+    "bio": ""
+  },
+  
+  {
+    "id": "p13",
+    "name": "Гузь (Савина) Анна Федоровна",
+    "years": "1910–1983",
+    "place": "г. Тверь",
+    "gen": 3,
+    "parents": [
+      "p6",
+      "p8"
+    ],
+    "photo": "photos/AnnaGuzNEW.jpg",
+    "bio": ""
+  },
+  {
+    "id": "p14",
+    "name": "Гузь Иван Иванович",
+    "years": "1907-1970",
+    "place": "с. Вознесеновка",
+    "gen": 3,
+    "parents": [],
+    "photo": "photos/GuzIvIv.jpg",
+    "bio": ""
   },
   {
     "id": "p12",
@@ -142,29 +166,6 @@
     "parents": [],
     "photo": "photos/savinamariya.jpg",
     "bio": "Вошла в семью браком с Иваном Федоровичем"
-  },
-  {
-    "id": "p13",
-    "name": "Гузь (Савина) Анна Федоровна",
-    "years": "1910–1983",
-    "place": "г. Тверь",
-    "gen": 3,
-    "parents": [
-      "p6",
-      "p8"
-    ],
-    "photo": "photos/AnnaGuzNEW.jpg",
-    "bio": ""
-  },
-  {
-    "id": "p14",
-    "name": "Гузь Иван Иванович",
-    "years": "1907-1970",
-    "place": "с. Вознесеновка",
-    "gen": 3,
-    "parents": [],
-    "photo": "photos/GuzIvIv.jpg",
-    "bio": ""
   },
   {
     "id": "p15",
