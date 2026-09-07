@@ -285,12 +285,32 @@ h1 em { font-style: italic; font-weight: 500; color: var(--brass-bright); }
    чтобы это правило не влияло на мобильную вёрстку. */
 .tree-wrap { width: 90vw; max-width: 90vw; margin: 0 auto; padding: 36px 0 80px; }
 .tree-scroll {
-  overflow-x: auto; overflow-y: hidden;
-  padding: 4px 32px 28px; scrollbar-color: var(--brass) transparent;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding: 4px 32px 28px;
+  min-height: 170px;
+  scrollbar-width: auto;
+  scrollbar-color: var(--brass) #252a30;
 }
-.tree-scroll::-webkit-scrollbar { height: 8px; }
-.tree-scroll::-webkit-scrollbar-track { background: transparent; }
-.tree-scroll::-webkit-scrollbar-thumb { background: rgba(184,146,90,0.4); border-radius: 4px; }
+
+.tree-scroll::-webkit-scrollbar {
+  height: 16px;
+}
+
+.tree-scroll::-webkit-scrollbar-track {
+  background: #252a30;
+  border-radius: 4px;
+}
+
+.tree-scroll::-webkit-scrollbar-thumb {
+  background: var(--brass);
+  border: 3px solid #252a30;
+  border-radius: 6px;
+}
+
+.tree-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--brass-bright);
+}
 .tree-inner {
   position: relative;
   width: max-content;
