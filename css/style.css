@@ -292,7 +292,7 @@ h1 em { font-style: italic; font-weight: 500; color: var(--brass-bright); }
 .tree-scroll::-webkit-scrollbar-track { background: transparent; }
 .tree-scroll::-webkit-scrollbar-thumb { background: rgba(184,146,90,0.4); border-radius: 4px; }
 .tree-inner {
-  position: relative; width: max-content;
+  position: relative; width: max-content; margin: 0 auto;
   display: flex; flex-direction: column; gap: 6px;
 }
 svg.connections {
