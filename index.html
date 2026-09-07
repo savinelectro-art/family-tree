@@ -15,6 +15,21 @@
 </head>
 <body>
 
+<!--
+  Поля-приманки для автозаполнения браузера.
+  Без формы <form> и с полями без чётких autocomplete-атрибутов Chrome
+  иногда всё равно решает, что на странице есть форма логина (из-за
+  наличия обычного type="password" в панели настроек GitHub), и пытается
+  подставить сохранённые логин/пароль в первое подходящее текстовое поле
+  на странице — например, в поле поиска родственника. Эти скрытые поля
+  с "правильными" autocomplete-атрибутами перехватывают такое
+  автозаполнение на себя, не давая ему попасть в реальные поля формы.
+-->
+<input type="text" name="username" autocomplete="username" tabindex="-1" aria-hidden="true"
+       style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;">
+<input type="password" name="password" autocomplete="new-password" tabindex="-1" aria-hidden="true"
+       style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;">
+
 <header class="hero">
   <p class="eyebrow">Семейный архив &middot; <span id="header-gens">—</span> поколений</p>
   <h1>Родословная <em>рода Савиных</em></h1>
@@ -28,7 +43,7 @@
     <div class="stat"><span class="num">1872</span><span class="label">самая ранняя фотография</span></div>
   </div>
   <div class="search-row">
-    <input id="search" type="text" placeholder="Найти человека по имени…" autocomplete="off">
+    <input id="search" name="ft-search" type="text" placeholder="Найти человека по имени…" autocomplete="off">
     <button id="reset-btn" type="button">Сбросить</button>
     <button id="export-json" type="button">📥 Экспорт</button>
     <button id="github-push-btn" type="button" class="ghost-btn">🔗 На GitHub</button>
@@ -42,13 +57,13 @@
   <div class="relation-inputs">
     <div class="relation-field">
       <label for="rel-input-a">Первый человек</label>
-      <input id="rel-input-a" type="text" placeholder="Начните вводить имя…" autocomplete="off"
+      <input id="rel-input-a" name="ft-person-a" type="text" placeholder="Начните вводить имя…" autocomplete="off"
              aria-autocomplete="list" aria-controls="ac-list-a">
       <div class="autocomplete-list" id="ac-list-a" role="listbox"></div>
     </div>
     <div class="relation-field">
       <label for="rel-input-b">Второй человек</label>
-      <input id="rel-input-b" type="text" placeholder="Начните вводить имя…" autocomplete="off"
+      <input id="rel-input-b" name="ft-person-b" type="text" placeholder="Начните вводить имя…" autocomplete="off"
              aria-autocomplete="list" aria-controls="ac-list-b">
       <div class="autocomplete-list" id="ac-list-b" role="listbox"></div>
     </div>
@@ -115,23 +130,24 @@
     <h3>Настройки GitHub</h3>
     <div class="editor-field">
       <label for="gh-owner">Владелец репозитория (пользователь/организация)</label>
-      <input id="gh-owner" type="text" placeholder="savinelectro-art"/>
+      <input id="gh-owner" name="ft-gh-owner" type="text" placeholder="savinelectro-art" autocomplete="off"/>
     </div>
     <div class="editor-field">
       <label for="gh-repo">Название репозитория</label>
-      <input id="gh-repo" type="text" placeholder="family-tree"/>
+      <input id="gh-repo" name="ft-gh-repo" type="text" placeholder="family-tree" autocomplete="off"/>
     </div>
     <div class="editor-field">
       <label for="gh-branch">Ветка</label>
-      <input id="gh-branch" type="text" placeholder="main"/>
+      <input id="gh-branch" name="ft-gh-branch" type="text" placeholder="main" autocomplete="off"/>
     </div>
     <div class="editor-field">
       <label for="gh-path">Путь к файлу данных</label>
-      <input id="gh-path" type="text" placeholder="data/people.json"/>
+      <input id="gh-path" name="ft-gh-path" type="text" placeholder="data/people.json" autocomplete="off"/>
     </div>
     <div class="editor-field">
       <label for="gh-token">Personal Access Token</label>
-      <input id="gh-token" type="password" placeholder="github_pat_…" autocomplete="off"/>
+      <input id="gh-token" name="ft-gh-token" type="password" placeholder="github_pat_…"
+             autocomplete="new-password" data-lpignore="true" data-1p-ignore="true"/>
     </div>
     <p class="gh-hint">
       Нужен fine-grained токен, выданный только на этот репозиторий,
@@ -711,6 +727,13 @@ function openPanel(id) {
 }
 
 function closePanel() {
+  // ИСПРАВЛЕНО: та же проблема, что и с editor-panel/github-panel —
+  // если фокус (например, кнопка "Закрыть" или чип внутри панели) ещё
+  // внутри неё в момент простановки aria-hidden="true", браузер ругается
+  // на потерю доступности фокуса. Снимаем фокус заранее.
+  if (panel.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
   overlay.classList.remove('open');
   panel.classList.remove('open');
   panel.setAttribute('aria-hidden', 'true');
