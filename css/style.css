@@ -280,10 +280,10 @@ h1 em { font-style: italic; font-weight: 500; color: var(--brass-bright); }
 .relation-result .result-path span { color: var(--ink-soft); }
 
 /* ── Tree ── */
-/* Основная область с карточками занимает 3/4 ширины экрана на десктопе.
+/* Основная область с карточками занимает 90% ширины экрана на десктопе.
    На мобильных (см. @media max-width:640px ниже) явно возвращаем 100%,
    чтобы это правило не влияло на мобильную вёрстку. */
-.tree-wrap { width: 75vw; max-width: 75vw; margin: 0 auto; padding: 36px 0 80px; }
+.tree-wrap { width: 90vw; max-width: 90vw; margin: 0 auto; padding: 36px 0 80px; }
 .tree-scroll {
   overflow-x: auto; overflow-y: hidden;
   padding: 4px 32px 28px; scrollbar-color: var(--brass) transparent;
@@ -326,7 +326,7 @@ svg.connections path.dim { opacity: 0.08; }
   font-family: 'Playfair Display', serif; font-style: italic;
   font-size: 15px; color: var(--ink-soft); line-height: 1.3;
 }
-.gen-track { display: flex; gap: 22px; padding: 14px 24px 14px 0; align-items: flex-start; }
+.gen-track { display: flex; gap: 22px; padding: 14px 24px 14px 0; align-items: center; }
 
 /* ── Cards ── */
 .card {
