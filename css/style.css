@@ -280,7 +280,10 @@ h1 em { font-style: italic; font-weight: 500; color: var(--brass-bright); }
 .relation-result .result-path span { color: var(--ink-soft); }
 
 /* ── Tree ── */
-.tree-wrap { max-width: 1100px; margin: 0 auto; padding: 36px 0 80px; }
+/* Основная область с карточками занимает 3/4 ширины экрана на десктопе.
+   На мобильных (см. @media max-width:640px ниже) явно возвращаем 100%,
+   чтобы это правило не влияло на мобильную вёрстку. */
+.tree-wrap { width: 75vw; max-width: 75vw; margin: 0 auto; padding: 36px 0 80px; }
 .tree-scroll {
   overflow-x: auto; overflow-y: hidden;
   padding: 4px 32px 28px; scrollbar-color: var(--brass) transparent;
@@ -541,6 +544,7 @@ footer {
 
 @media (max-width: 640px) {
   header.hero { padding: 40px 20px 28px; }
+  .tree-wrap { width: 100%; max-width: 100%; }
   .tree-scroll { padding: 4px 20px 24px; }
   .gen-label { width: 96px; flex-basis: 96px; }
   .panel { width: 100%; max-width: 100%; }
