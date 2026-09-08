@@ -742,8 +742,10 @@ function openPanel(id) {
     }
   }
 
-  overlay.classList.add('open');
+  panel.scrollTop = 0;
   panel.classList.add('open');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
   panel.setAttribute('aria-hidden', 'false');
 }
 
@@ -755,8 +757,9 @@ function closePanel() {
   if (panel.contains(document.activeElement)) {
     document.activeElement.blur();
   }
-  overlay.classList.remove('open');
   panel.classList.remove('open');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
   panel.setAttribute('aria-hidden', 'true');
 }
 
@@ -771,6 +774,7 @@ function openLightbox(src, name) {
   lightboxImg.src = src;
   lightboxImg.alt = name || '';
   lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
   lightbox.setAttribute('aria-hidden', 'false');
   document.getElementById('lightbox-close')?.focus();
 }
@@ -780,6 +784,7 @@ function closeLightbox() {
     document.activeElement.blur();
   }
   lightbox.classList.remove('open');
+  document.body.style.overflow = '';
   lightbox.setAttribute('aria-hidden', 'true');
   // Небольшая задержка перед очисткой src, чтобы не мигало во время transition
   setTimeout(() => { if (!lightbox.classList.contains('open')) lightboxImg.src = ''; }, 200);
