@@ -576,10 +576,53 @@ footer {
 }
 
 @media (max-width: 640px) {
-  header.hero { padding: 40px 20px 28px; }
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  header.hero {
+    width: 100%;
+    max-width: 100%;
+    padding: 32px 16px 24px;
+  }
+
+  .hero-sub {
+    max-width: 100%;
+    font-size: 16px;
+  }
+
+  .search-row {
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #search {
+    flex: 1 1 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  #reset-btn, #export-json, .ghost-btn {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 10px 11px;
+  }
   .tree-wrap { width: 100%; max-width: 100%; }
-  .tree-scroll { padding: 4px 20px 24px; overflow-x: hidden; }
-  .gen-label { width: 96px; flex-basis: 96px; }
+  .tree-scroll {
+    width: 100%;
+    max-width: 100%;
+    padding: 4px 12px 24px;
+    overflow-x: hidden;
+  }
+  .gen-label {
+    width: 72px;
+    flex-basis: 72px;
+    padding-right: 8px;
+  }
 
   /* Мобильная сетка: вместо десктопного горизонтального ряда с прокруткой —
      карточки поколения выкладываются в 2 колонки и переносятся на новую
@@ -595,11 +638,20 @@ footer {
   .gen-track {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 12px;
     flex: 1;
-    padding: 14px 4px 14px 12px;
+    min-width: 0;
+    padding: 14px 0 14px 8px;
   }
-  .card { width: 100%; }
+  .card {
+    width: 100%;
+    min-width: 0;
+  }
+  .card .name,
+  .card .yrs {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
 
   .panel {
     width: 100vw;
@@ -643,7 +695,22 @@ footer {
     top: max(14px, env(safe-area-inset-top));
     right: 14px;
   }
-  .relation-section { padding: 28px 20px 0; }
+  .editor-content {
+    width: calc(100% - 24px);
+    max-width: none;
+    padding: 20px 16px;
+  }
+
+  .editor-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+  .relation-section { padding: 24px 16px 0; }
   .relation-inputs { flex-direction: column; }
   .relation-field { max-width: 100%; }
   .relation-btn { width: 100%; }
