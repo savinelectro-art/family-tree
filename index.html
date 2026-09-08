@@ -700,9 +700,9 @@ function relList(ids, empty) {
 function openPanel(id) {
   const p = byId[id];
   panelBody.innerHTML = `
-    <div class="photo-lg${p.photo ? ' clickable' : ''}">${p.photo
-      ? `<img src="${escapeHtml(p.photo)}" alt="${escapeHtml(p.name)}">`
-      : `<span class="initials">${escapeHtml(p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase())}</span>`}</div>
+    <div class="photo-lg" style="cursor: pointer;" onclick="window.openPhotoModal('${p.photo}', '${p.name}')">${p.photo
+  ? `<img src="${p.photo}" alt="${p.name}">`
+  : `<span class="initials">...</span>`}</div>
     <h2>${escapeHtml(p.name)}</h2>
     <div class="meta">${escapeHtml(p.years)}${p.place ? ` &middot; <span class="place">${escapeHtml(p.place)}</span>` : ''}</div>
     <button id="edit-btn" type="button" class="chip" style="margin-bottom:16px;">✏️ Редактировать</button>
@@ -828,6 +828,34 @@ document.getElementById('search').addEventListener('input', e => {
   resetBtn.classList.add('visible');
   noResults.classList.toggle('show', !matches.length);
 });
+</script>
+<!-- Модальное окно для фото -->
+<div id="photo-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:2000; display:flex; align-items:center; justify-content:center;">
+  <div style="position:relative; width:90vw; max-width:500px;">
+    <button onclick="document.getElementById('photo-modal').style.display='none'" style="position:absolute; top:-40px; right:0; background:none; border:none; color:#fff; font-size:28px; cursor:pointer;">×</button>
+    <img id="modal-photo" src="" alt="" style="width:100%; border-radius:4px; box-shadow:0 10px 40px rgba(0,0,0,0.8);">
+  </div>
+</div>
+
+<script>
+  window.openPhotoModal = function(photoUrl, name) {
+    if (!photoUrl) return;
+    const modal = document.getElementById('photo-modal');
+    const img = document.getElementById('modal-photo');
+    img.src = photoUrl;
+    img.alt = name;
+    modal.style.display = 'flex';
+  };
+  
+  // Закрыть модаль при клике на фон
+  document.getElementById('photo-modal').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+  
+  // Закрыть при Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.getElementById('photo-modal').style.display = 'none';
+  });
 </script>
 </body>
 </html>
