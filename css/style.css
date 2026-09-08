@@ -578,8 +578,29 @@ footer {
 @media (max-width: 640px) {
   header.hero { padding: 40px 20px 28px; }
   .tree-wrap { width: 100%; max-width: 100%; }
-  .tree-scroll { padding: 4px 20px 24px; }
+  .tree-scroll { padding: 4px 20px 24px; overflow-x: hidden; }
   .gen-label { width: 96px; flex-basis: 96px; }
+
+  /* Мобильная сетка: вместо десктопного горизонтального ряда с прокруткой —
+     карточки поколения выкладываются в 2 колонки и переносятся на новую
+     строку. .tree-inner больше не подстраивается под самое широкое
+     поколение (width:max-content), а всегда занимает 100% экрана, поэтому
+     горизонтальный скролл не нужен вообще. */
+  .tree-inner { width: 100%; margin: 0; }
+  .gen-row { align-items: flex-start; }
+  /* Линии родства рассчитаны на один горизонтальный ряд карточек и в сетке
+     из 2 колонок будут пересекаться и выглядеть хаотично. На мобильном
+     скрываем их — связи видны в боковой панели при нажатии на карточку. */
+  svg.connections { display: none; }
+  .gen-track {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    flex: 1;
+    padding: 14px 4px 14px 12px;
+  }
+  .card { width: 100%; }
+
   .panel { width: 100%; max-width: 100%; }
   .relation-section { padding: 28px 20px 0; }
   .relation-inputs { flex-direction: column; }
