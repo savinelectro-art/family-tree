@@ -1,0 +1,492 @@
+[
+  {
+    "id": "photo_001",
+    "file": "photos/5effd8bb79a0c496bd2aedea95980483_b951162e-0c30-4bb5-b295-03ef713cb554.png",
+    "title": "Семейная фотография",
+    "date": "",
+    "place": "",
+    "category": "family",
+    "people": [],
+    "description": ""
+  },
+  {
+    "id": "photo_002",
+    "file": "photos/Alex1972.jpg",
+    "title": "Савин Александр Васильевич",
+    "date": "1972",
+    "place": "с. Вознесеновка",
+    "category": "portrait",
+    "people": [
+      "p5"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_003",
+    "file": "photos/AnnaGuzNEW.jpg",
+    "title": "Гузь (Савина) Анна Федоровна",
+    "date": "1910–1983",
+    "place": "с. Вознесеновка, Белогорск",
+    "category": "portrait",
+    "people": [
+      "p13"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_004",
+    "file": "photos/Fedor1889.jpg",
+    "title": "Савин Федор Васильевич",
+    "date": "1889–1960",
+    "place": "с. Вознесеновка",
+    "category": "portrait",
+    "people": [
+      "p6"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_005",
+    "file": "photos/Fekla1871.jpg",
+    "title": "Савина Фекла Кузьминична",
+    "date": "1871–1940",
+    "place": "с. Вознесеновка",
+    "category": "portrait",
+    "people": [
+      "p2"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_006",
+    "file": "photos/GuzIvIv.jpg",
+    "title": "Гузь Иван Иванович",
+    "date": "1907–1970",
+    "place": "с. Вознесеновка, Белогорск",
+    "category": "portrait",
+    "people": [
+      "p14"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_007",
+    "file": "photos/Iosif1934.jpg",
+    "title": "Савин Иосиф Васильевич",
+    "date": "–1934",
+    "place": "с. Вознесеновка",
+    "category": "portrait",
+    "people": [
+      "p3"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_008",
+    "file": "photos/IvanFedorovich.jpg",
+    "title": "Савин Иван Федорович",
+    "date": "–29.08.1988",
+    "place": "с. Вознесеновка",
+    "category": "portrait",
+    "people": [
+      "p12"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_009",
+    "file": "photos/MariyaVas.jpg",
+    "title": "Савина Мария Васильевна",
+    "date": "1904–1990",
+    "place": "г. Тверь",
+    "category": "portrait",
+    "people": [
+      "p7"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_010",
+    "file": "photos/NataliyaVas.jpg",
+    "title": "Савина Наталия Васильевна",
+    "date": "1904–1990",
+    "place": "г. Тверь",
+    "category": "portrait",
+    "people": [
+      "p9"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_011",
+    "file": "photos/Petr1970.jpg",
+    "title": "Савин Петр Васильевич",
+    "date": "–1970",
+    "place": "с. Вознесеновка",
+    "category": "portrait",
+    "people": [
+      "p4"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_012",
+    "file": "photos/Vasilii1870.jpg",
+    "title": "Савин Василий Петрович",
+    "date": "1870–1938",
+    "place": "с. Вознесеновка",
+    "category": "portrait",
+    "people": [
+      "p1"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_013",
+    "file": "photos/afoninaoksana.jpg",
+    "title": "Афонина (Гузь) Оксана Викторовна",
+    "date": "1966гр",
+    "place": "г. Пушкин",
+    "category": "portrait",
+    "people": [
+      "p27"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_014",
+    "file": "photos/afoninyuriy.jpg",
+    "title": "Афонин Юрий Викторович",
+    "date": "1965–2023",
+    "place": "Брянск, Мурманская обл., Санкт-Петербург",
+    "category": "portrait",
+    "people": [
+      "p28"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_015",
+    "file": "photos/antonukmariya.jpg",
+    "title": "Антонюк (Савина) Мария Федоровна",
+    "date": "1931–2015",
+    "place": "г. Москва",
+    "category": "portrait",
+    "people": [
+      "p15"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_016",
+    "file": "photos/elenaosipenko.jpg",
+    "title": "Осипенко Елена Александровна",
+    "date": "19-",
+    "place": "г. Владивосток",
+    "category": "portrait",
+    "people": [
+      "p51"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_017",
+    "file": "photos/evdokiya.jpg",
+    "title": "Савина Евдокия Андреевна",
+    "date": "1905–1985",
+    "place": "г. Тверь",
+    "category": "portrait",
+    "people": [
+      "p8"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_018",
+    "file": "photos/homskayadasha.jpg",
+    "title": "Хомская (Савина) Дарья Андреевна",
+    "date": "1986гр",
+    "place": "г. Воркута",
+    "category": "portrait",
+    "people": [
+      "p44"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_019",
+    "file": "photos/homskayanikol.jpg",
+    "title": "Хомская Николь Марковна",
+    "date": "2006гр",
+    "place": "г. Иваново",
+    "category": "portrait",
+    "people": [
+      "p49"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_020",
+    "file": "photos/nadezhdabudnikova.jpg",
+    "title": "Будникова (Гузь) Надежда Ивановна",
+    "date": "1952гр",
+    "place": "г. Белогорск",
+    "category": "portrait",
+    "people": [
+      "p22"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_021",
+    "file": "photos/osoblivecmihail.jpg",
+    "title": "Особливец Михаил Михайлович",
+    "date": "1956–2022",
+    "place": "Херсон, Казахстан",
+    "category": "portrait",
+    "people": [
+      "p25"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_022",
+    "file": "photos/pobereghnayanastya.jpg",
+    "title": "Побережная (Афонина) Анастасия Юрьевна",
+    "date": "1989гр",
+    "place": "Мурманская обл., Санкт-Петербург",
+    "category": "portrait",
+    "people": [
+      "p30"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_023",
+    "file": "photos/savinaalisa.jpg",
+    "title": "Савина Алиса Денисовна",
+    "date": "2013гр",
+    "place": "г. Москва",
+    "category": "portrait",
+    "people": [
+      "p47"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_024",
+    "file": "photos/savinaalla.jpg",
+    "title": "Савина (Захарова) Алла Федоровна",
+    "date": "",
+    "place": "",
+    "category": "portrait",
+    "people": [
+      "p36"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_025",
+    "file": "photos/savinaasiya.jpg",
+    "title": "Савина (Мухамадеева) Асия Валенуровна",
+    "date": "1982гр",
+    "place": "г. Кемерово",
+    "category": "portrait",
+    "people": [
+      "p43"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_026",
+    "file": "photos/savinairina.jpg",
+    "title": "Савина Ирина Ивановна",
+    "date": "1947гр",
+    "place": "г. Южно-Сахалинск",
+    "category": "portrait",
+    "people": [
+      "p34"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_027",
+    "file": "photos/savinalidiya.jpg",
+    "title": "Савина Лидия Федоровна",
+    "date": "неизвестно",
+    "place": "г. Москва",
+    "category": "portrait",
+    "people": [
+      "p16"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_028",
+    "file": "photos/savinamariya.jpg",
+    "title": "Савина (Семенко) Мария Васильевна",
+    "date": "19–1985",
+    "place": "с. Вознесеновка",
+    "category": "portrait",
+    "people": [
+      "p11"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_029",
+    "file": "photos/savinanataliya.jpg",
+    "title": "Савина (Рубайко) Наталья Юрьевна",
+    "date": "1956–2017",
+    "place": "г. Иваново",
+    "category": "portrait",
+    "people": [
+      "p40"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_030",
+    "file": "photos/savinandrey.jpg",
+    "title": "Савин Андрей Владиславович",
+    "date": "1956–2019",
+    "place": "г. Владивосток",
+    "category": "portrait",
+    "people": [
+      "p39"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_031",
+    "file": "photos/savinatasya.jpg",
+    "title": "Савина Таисия Денисовна",
+    "date": "2017гр",
+    "place": "г. Москва",
+    "category": "portrait",
+    "people": [
+      "p48"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_032",
+    "file": "photos/savinaulya.jpg",
+    "title": "Савина (Абакумова) Ульяна Валерьевна",
+    "date": "1980гр",
+    "place": "г. Иваново",
+    "category": "portrait",
+    "people": [
+      "p42"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_033",
+    "file": "photos/savinayasya.jpg",
+    "title": "Дмитриева (Савина) Ярослава Денисовна",
+    "date": "2001гр",
+    "place": "г. Иваново",
+    "category": "portrait",
+    "people": [
+      "p46"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_034",
+    "file": "photos/savindenis.jpg",
+    "title": "Савин Денис Андреевич",
+    "date": "1979гр",
+    "place": "г. Иваново",
+    "category": "portrait",
+    "people": [
+      "p41"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_035",
+    "file": "photos/savingena.jpg",
+    "title": "Савин Геннадий Иванович",
+    "date": "19–1987",
+    "place": "г. Канск",
+    "category": "portrait",
+    "people": [
+      "p38"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_036",
+    "file": "photos/savinjeniya.jpg",
+    "title": "Савин Евгений Иванович",
+    "date": "1940–1985",
+    "place": "г. Оха",
+    "category": "portrait",
+    "people": [
+      "p37"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_037",
+    "file": "photos/savinlidiya.jpg",
+    "title": "Савина Лидия Федоровна",
+    "date": "неизвестно",
+    "place": "г. Москва",
+    "category": "portrait",
+    "people": [
+      "p16"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_038",
+    "file": "photos/savinvladislav.jpg",
+    "title": "Савин Владислав Иванович",
+    "date": "",
+    "place": "",
+    "category": "portrait",
+    "people": [
+      "p35"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_039",
+    "file": "photos/viktorguz.jpg",
+    "title": "Гузь Виктор Иванович",
+    "date": "1940–2011",
+    "place": "Белогорск, Херсон",
+    "category": "portrait",
+    "people": [
+      "p19"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_040",
+    "file": "photos/yuliyaguz.jpg",
+    "title": "Гузь (Рубан) Юлия Николаевна",
+    "date": "1941–2024",
+    "place": "Благовещенск, Херсон, Санкт-Петербург",
+    "category": "portrait",
+    "people": [
+      "p20"
+    ],
+    "description": ""
+  },
+  {
+    "id": "photo_041",
+    "file": "photos/zinaidaosipenko.jpg",
+    "title": "Осипенко (Гузь) Зинаида Ивановна",
+    "date": "1938гр",
+    "place": "Белогорск, г. Владивосток",
+    "category": "portrait",
+    "people": [
+      "p21"
+    ],
+    "description": ""
+  }
+]

@@ -31,6 +31,11 @@
        style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;">
 
 <header class="hero">
+  <nav class="site-nav" aria-label="Навигация по сайту">
+    <a href="#family-tree-section">🌳 Семейное дерево</a>
+    <a href="#photo-archive">📷 Фотоархив</a>
+  </nav>
+
   <p class="eyebrow">Семейный архив &middot; <span id="header-gens">—</span> поколений</p>
   <h1>Родословная <em>рода Савиных</em></h1>
   <p class="hero-sub">
@@ -76,7 +81,40 @@
   </div>
 </section>
 
-<div class="tree-wrap">
+
+<section class="archive-section" id="photo-archive" aria-label="Семейный фотоархив">
+  <div class="archive-head">
+    <div>
+      <p class="section-title">Семейная память</p>
+      <h2>Фотоархив рода</h2>
+      <p class="archive-subtitle">Фотографии, связанные с людьми из семейного дерева.</p>
+    </div>
+    <a class="archive-back" href="#family-tree-section">↑ К дереву</a>
+  </div>
+
+  <div class="archive-toolbar">
+    <div class="archive-search-wrap">
+      <span aria-hidden="true">⌕</span>
+      <input id="archive-search" type="search" placeholder="Найти по имени, году, месту…" autocomplete="off">
+    </div>
+    <select id="archive-generation" aria-label="Поколение">
+      <option value="">Все поколения</option>
+    </select>
+    <select id="archive-category" aria-label="Категория">
+      <option value="">Все категории</option>
+      <option value="portrait">Портреты</option>
+      <option value="family">Семья</option>
+      <option value="documents">Документы</option>
+      <option value="other">Другое</option>
+    </select>
+  </div>
+
+  <div class="archive-stats" id="archive-stats"></div>
+  <div class="archive-grid" id="archive-grid"></div>
+  <p class="archive-empty" id="archive-empty" hidden>По вашему запросу фотографий не найдено.</p>
+</section>
+
+<div class="tree-wrap" id="family-tree-section">
   <div class="tree-scroll">
     <div class="tree-inner" id="tree-inner">
       <svg class="connections" id="svg-lines"></svg>
@@ -173,7 +211,7 @@
    ИНИЦИАЛИЗАЦИЯ И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
    ===================================================================== */
 
-let PEOPLE = [];
+window.PEOPLE = [];\nlet PEOPLE = window.PEOPLE;
 let byId = {};
 let childrenOf = {};
 
@@ -195,7 +233,7 @@ function escapeHtml(str){
 async function initTree(){
   try {
     // Загружаем данные через data-loader
-    PEOPLE = await SavinTreeData.loadPeople();
+    PEOPLE = await SavinTreeData.loadPeople();\n    window.PEOPLE = PEOPLE;
     
     // Пересчитываем индексы
     byId = Object.fromEntries(PEOPLE.map(p => [p.id, p]));
@@ -664,7 +702,7 @@ function connectedIds(id) {
   return vis;
 }
 
-function selectPerson(id) {
+window.selectPerson = selectPerson;\nfunction selectPerson(id) {
   const active = connectedIds(id);
   document.querySelectorAll('.card').forEach(el => {
     el.classList.toggle('dim',    !active.has(el.dataset.id));
@@ -697,7 +735,7 @@ function relList(ids, empty) {
   return ids.map(id => `<button class="chip" data-jump="${id}">${escapeHtml(byId[id].name)}</button>`).join('');
 }
 
-function openPanel(id) {
+window.openPanel = openPanel;\nfunction openPanel(id) {
   const p = byId[id];
   panelBody.innerHTML = `
     <div class="photo-lg${p.photo ? ' clickable' : ''}">${p.photo
@@ -742,10 +780,8 @@ function openPanel(id) {
     }
   }
 
-  panel.scrollTop = 0;
-  panel.classList.add('open');
   overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  panel.classList.add('open');
   panel.setAttribute('aria-hidden', 'false');
 }
 
@@ -757,9 +793,8 @@ function closePanel() {
   if (panel.contains(document.activeElement)) {
     document.activeElement.blur();
   }
-  panel.classList.remove('open');
   overlay.classList.remove('open');
-  document.body.style.overflow = '';
+  panel.classList.remove('open');
   panel.setAttribute('aria-hidden', 'true');
 }
 
@@ -774,7 +809,6 @@ function openLightbox(src, name) {
   lightboxImg.src = src;
   lightboxImg.alt = name || '';
   lightbox.classList.add('open');
-  document.body.style.overflow = 'hidden';
   lightbox.setAttribute('aria-hidden', 'false');
   document.getElementById('lightbox-close')?.focus();
 }
@@ -784,7 +818,6 @@ function closeLightbox() {
     document.activeElement.blur();
   }
   lightbox.classList.remove('open');
-  document.body.style.overflow = '';
   lightbox.setAttribute('aria-hidden', 'true');
   // Небольшая задержка перед очисткой src, чтобы не мигало во время transition
   setTimeout(() => { if (!lightbox.classList.contains('open')) lightboxImg.src = ''; }, 200);
@@ -834,5 +867,6 @@ document.getElementById('search').addEventListener('input', e => {
   noResults.classList.toggle('show', !matches.length);
 });
 </script>
+<script src="js/archive.js"></script>
 </body>
 </html>

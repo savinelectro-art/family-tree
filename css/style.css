@@ -718,3 +718,209 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+
+/* ================================================================
+   PHOTO ARCHIVE
+   ================================================================ */
+.site-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 22px auto 0;
+  flex-wrap: wrap;
+}
+.site-nav a,
+.archive-back {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border: 1px solid rgba(184,146,90,.28);
+  background: rgba(255,255,255,.025);
+  padding: 9px 13px;
+  border-radius: 999px;
+  font-size: 13px;
+  transition: .2s ease;
+}
+.site-nav a:hover,
+.archive-back:hover {
+  color: var(--paper);
+  border-color: var(--brass);
+  background: rgba(184,146,90,.08);
+}
+.archive-section {
+  width: min(1180px, calc(100% - 32px));
+  margin: 18px auto 0;
+  padding: 34px 0 44px;
+  border-top: 1px solid rgba(184,146,90,.18);
+}
+.archive-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  margin-bottom: 22px;
+}
+.archive-head h2 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 42px);
+  color: var(--paper);
+}
+.archive-subtitle {
+  margin: 7px 0 0;
+  color: var(--ink-faint);
+  font-size: 14px;
+}
+.archive-toolbar {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) 190px 170px;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.archive-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  border: 1px solid rgba(184,146,90,.24);
+  border-radius: 8px;
+  background: rgba(0,0,0,.16);
+  padding: 0 12px;
+}
+.archive-search-wrap span {
+  color: var(--brass);
+  font-size: 20px;
+}
+.archive-search-wrap input,
+.archive-toolbar select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid rgba(184,146,90,.24);
+  border-radius: 8px;
+  background: #151310;
+  color: var(--paper);
+  padding: 11px 12px;
+  font: inherit;
+}
+.archive-search-wrap input {
+  border: 0;
+  padding-left: 0;
+  background: transparent;
+}
+.archive-search-wrap input:focus,
+.archive-toolbar select:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+.archive-stats {
+  min-height: 18px;
+  margin: 8px 0 18px;
+  color: var(--ink-faint);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+.archive-grid {
+  columns: 4 220px;
+  column-gap: 14px;
+}
+.archive-card {
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 14px;
+  break-inside: avoid;
+  border: 1px solid rgba(184,146,90,.22);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255,255,255,.025);
+  cursor: pointer;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.archive-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(184,146,90,.55);
+  box-shadow: 0 12px 28px rgba(0,0,0,.24);
+}
+.archive-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+  object-fit: cover;
+  background: #0e0d0b;
+}
+.archive-card-body {
+  padding: 11px 12px 13px;
+}
+.archive-card-title {
+  color: var(--paper);
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  line-height: 1.2;
+}
+.archive-card-meta {
+  margin-top: 5px;
+  color: var(--brass);
+  font: 11px/1.5 'JetBrains Mono', monospace;
+}
+.archive-card-place {
+  margin-top: 3px;
+  color: var(--ink-faint);
+  font-size: 12px;
+}
+.archive-card-tag {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 7px;
+  border: 1px solid rgba(184,146,90,.2);
+  border-radius: 999px;
+  color: var(--ink-faint);
+  font-size: 10px;
+}
+.archive-empty {
+  padding: 40px 12px;
+  text-align: center;
+  color: var(--ink-faint);
+}
+@media (max-width: 760px) {
+  .archive-section {
+    width: calc(100% - 32px);
+    padding-top: 26px;
+  }
+  .archive-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .archive-toolbar {
+    grid-template-columns: 1fr;
+  }
+  .archive-grid {
+    columns: 2 150px;
+    column-gap: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .site-nav {
+    gap: 7px;
+  }
+  .site-nav a,
+  .archive-back {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  .archive-section {
+    width: calc(100% - 24px);
+  }
+  .archive-grid {
+    columns: 2 130px;
+    column-gap: 8px;
+  }
+  .archive-card {
+    margin-bottom: 8px;
+  }
+  .archive-card-body {
+    padding: 9px;
+  }
+  .archive-card-title {
+    font-size: 15px;
+  }
+}
