@@ -93,6 +93,12 @@
   <div id="panel-body"></div>
 </aside>
 
+<!-- Полноразмерный просмотр фото -->
+<div class="photo-lightbox" id="photo-lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <!-- Панель редактирования персоны -->
 <div id="editor-panel" class="editor-panel" style="display:none;" aria-hidden="true">
   <div class="editor-content">
@@ -694,7 +700,7 @@ function relList(ids, empty) {
 function openPanel(id) {
   const p = byId[id];
   panelBody.innerHTML = `
-    <div class="photo-lg">${p.photo
+    <div class="photo-lg${p.photo ? ' clickable' : ''}">${p.photo
       ? `<img src="${escapeHtml(p.photo)}" alt="${escapeHtml(p.name)}">`
       : `<span class="initials">${escapeHtml(p.name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase())}</span>`}</div>
     <h2>${escapeHtml(p.name)}</h2>
@@ -721,6 +727,21 @@ function openPanel(id) {
     });
   }
 
+  // Клик по фото в боковой панели — открыть его в полном размере по центру экрана
+  if (p.photo) {
+    const photoEl = panelBody.querySelector('.photo-lg.clickable');
+    if (photoEl) {
+      photoEl.setAttribute('role', 'button');
+      photoEl.setAttribute('tabindex', '0');
+      photoEl.setAttribute('aria-label', `Открыть фото ${p.name} в полном размере`);
+      const open = () => openLightbox(p.photo, p.name);
+      photoEl.addEventListener('click', open);
+      photoEl.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+      });
+    }
+  }
+
   overlay.classList.add('open');
   panel.classList.add('open');
   panel.setAttribute('aria-hidden', 'false');
@@ -739,9 +760,46 @@ function closePanel() {
   panel.setAttribute('aria-hidden', 'true');
 }
 
+/* =====================================================================
+   ЛАЙТБОКС — полноразмерный просмотр фото по центру экрана
+   ===================================================================== */
+
+const lightbox    = document.getElementById('photo-lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+
+function openLightbox(src, name) {
+  lightboxImg.src = src;
+  lightboxImg.alt = name || '';
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden', 'false');
+  document.getElementById('lightbox-close')?.focus();
+}
+
+function closeLightbox() {
+  if (lightbox.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden', 'true');
+  // Небольшая задержка перед очисткой src, чтобы не мигало во время transition
+  setTimeout(() => { if (!lightbox.classList.contains('open')) lightboxImg.src = ''; }, 200);
+}
+
+function isLightboxOpen(){
+  return lightbox.classList.contains('open');
+}
+
+lightbox.addEventListener('click', e => {
+  if (e.target === lightbox) closeLightbox();
+});
+document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+
 overlay.addEventListener('click', clearSelection);
 document.getElementById('panel-close').addEventListener('click', clearSelection);
 document.addEventListener('keydown', e => {
+  // Лайтбокс имеет приоритет: если открыт он, Escape закрывает только его,
+  // не трогая боковую панель персоны под ним.
+  if (e.key === 'Escape' && isLightboxOpen()) { closeLightbox(); return; }
   // ИСПРАВЛЕНО: Escape закрывал только карточку/боковую панель. Если открыт
   // редактор — не трогаем боковую панель, чтобы Escape не сбрасывал выбор
   // дерева, пока пользователь редактирует данные (data-editor.js сам
